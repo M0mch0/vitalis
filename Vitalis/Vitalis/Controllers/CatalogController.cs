@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Vitalis.Data;
 using Vitalis.Models;
+using Vitalis.ViewModels;
 
 namespace Vitalis.Controllers
 {
@@ -20,7 +21,14 @@ namespace Vitalis.Controllers
         }
         public IActionResult Meals()
         {
-            return View();
+            ICollection<Meal> meals = dbContext.Meals
+                .Include(a => a.Ingredients)
+                .ThenInclude(a => a.Ingredient)
+                .OrderBy(a => a.Name)
+                .AsNoTracking()
+                .ToList();
+            
+            return View(meals);
         }
         public IActionResult Ingredients()
         {

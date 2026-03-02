@@ -1,0 +1,115 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using Vitalis.ViewModels
+@model CreateMealViewModel
+
+@{
+    ViewData["Title"] = "Create Meal";
+    IEnumerable<SelectListItem> ingredientsSelectListItems = Model.Ingredients
+            .Select(a => new SelectListItem()
+            {
+                Text = a.Name,
+                Value = a.Id.ToString()
+
+            });
+}
+
+<h1 style ="text-align: center">Create Meal</h1>
+
+<form asp-action="Meal" method="post" class="row g-3">
+    <div class="col-12 col-md-3">
+        <input asp-for="Name" class="form-control" placeholder="Name" />
+    </div>
+    <div class="col-12 col-md-9">
+        <textarea asp-for="Notes" class="form-control" placeholder="Notes regarding meal"></textarea>
+    </div>
+
+    
+    <div class="col-12 col-md-2">
+    </div>  
+    <div class="col-12 col-md-4 table-container">
+        <h3 style="text-align: center">Ingredients</h3>
+        <table class="table table-responsive-md col-md-9 table-hover">
+            <thead>
+                <tr><th style="width: 20%">Selected</th><th style="width: 40%">Ingredient</th><th style="width: 40%">Quantity (g)</th></tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Ingredients.Count; i++)
+                {
+                    var input = Model.Ingredients[i];
+                    var ingredient = Model.Ingredients.First(x => x.Id == input.Id);
+                    <tr>
+                        <td>
+                            <input asp-for="MealIngredientInputs[@i].Selected" />
+                            <input asp-for="MealIngredientInputs[@i].IngredientId" type="hidden" />
+                        </td>
+                        <td>@ingredient.Name</td>
+                        <td>
+                            <input asp-for="MealIngredientInputs[i].Quantity" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="col-12 col-md-4 table-container">
+        <h3 style="text-align: center">Tags</h3>
+        <table class="table table-responsive-md col-md-9 table-hover">
+            <thead>
+                <tr><th style="width: 20%">Selected</th><th style="width: 40%">Tag</th></tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Tags.Count; i++)
+                {
+                    var input = Model.Tags[i];
+                    var ingredient = Model.Tags.First(x => x.Id == input.Id);
+                    <tr>
+                        <td>
+                            <input asp-for="MealTagInputs[@i].Selected" />
+                            <input asp-for="MealTagInputs[@i].TagId" type="hidden" />
+                        </td>
+                        <td>@ingredient.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>    
+    </div>
+    <div style="text-align:center">
+        <button type="submit" class="btn btn-success"style="width : 100px">Create</button>
+        <a class="btn btn-secondary" asp-controller="Catalog" asp-action="Meals" style="width : 100px">Cancel</a>
+    </div>
+</form>
+@{/*<h1 class="mb-3">Create Meal</h1>
+ * 
+<form asp-action="Meal" method="post">
+    <div class="col-12 col-md-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="col-12 col-md-9">
+        <label asp-for="Notes" class="form-label"></label>
+        <input asp-for="Notes" class="form-control" />
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div>
+
+    <div class="col-12 col-md-8">
+        <label asp-for="AuthorId" class="form-label">Author</label>
+        <select asp-for="AuthorId" class="form-select" asp-items="Model.Ingredients">
+            <option value="">-- Select author --</option>
+        </select>
+        <span asp-validation-for="AuthorId" class="text-danger"></span>
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-success">Save</button>
+        <a class="btn btn-secondary" asp-controller="Books" asp-action="Index">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+*/}

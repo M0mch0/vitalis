@@ -1,5 +1,43 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model IEnumerable<Meal>
+@if (!Model.Any())
+{
+    <p class="text-muted">No meals yet.</p>
+}
+else
+{
+    <div>
+        <h1 class="mb-0">Meals</h1>
+        <a class="btn btn-primary" asp-controller="Create" asp-action="Meal">
+            + Add Meal
+        </a>
+            
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th style="width: 200px;">Name</th>
+                <th>Ingredients</th>
+                <th style="width: 60px;"> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Meal b in Model.OrderBy(b => b.Name))
+            {
+                <tr>
+                    <td>@b.Name</td>
+                    <td>@String.Join(", ", b.Ingredients.Where(mi => mi.MealId == b.Id).Select(mi => mi.Ingredient.Name))</td>
+                    
+                    <td style="text-align:center;">
+                        <a class="btn btn-sm btn-outline-primary align-items-end"
+                           asp-controller="Create"
+                           asp-action="Meal"
+                           asp-route-id="@b.Id">
+                            Edit
+                        </a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
 }
