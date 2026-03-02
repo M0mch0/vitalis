@@ -16,7 +16,7 @@ namespace Vitalis.Models
         public virtual ICollection<MealIngredient> Ingredients { get; set; } = new HashSet<MealIngredient>();
 
 
-        public ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
+        public virtual ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
 
         public NutrientProfile AggregateNutrientProfile()
         {

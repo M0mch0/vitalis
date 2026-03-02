@@ -3,11 +3,11 @@
     public static class ValidationConstants
     {
         // Ingredient
-        public const int IngredientNameMaxLength = 1000;
+        public const int IngredientNameMaxLength = 100;
         public const int IngredientNotesMaxLength = 2000;
 
         // Meal
-        public const int MealNameMaxLength = 1000;
+        public const int MealNameMaxLength = 100;
         public const int MealNotesMaxLength = 2000;
 
         // Tag

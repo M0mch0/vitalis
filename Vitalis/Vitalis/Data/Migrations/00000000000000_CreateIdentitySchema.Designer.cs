@@ -9,7 +9,7 @@ using Vitalis.Data;
 
 namespace Vitalis.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(VitalisDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {

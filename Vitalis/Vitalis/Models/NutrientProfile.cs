@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Vitalis.Data;
 namespace Vitalis.Models
 {
@@ -6,8 +7,8 @@ namespace Vitalis.Models
     {
         [Key]
         public int Id { get; set; }
-        
-        [Required]
+
+        [NotMapped]
         public int Calories => Carbohydrates * 4 + Protein * 4 + Fat * 9;
 
         [Required]
