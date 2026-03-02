@@ -17,6 +17,7 @@ namespace Vitalis.Controllers
         [HttpGet]
         public IActionResult Meal()
         {
+            
             var vm = new CreateMealViewModel
             {
                 Ingredients = dbContext.Ingredients

@@ -30,6 +30,25 @@ namespace Vitalis.Controllers
             
             return View(meals);
         }
+        [HttpPost]
+        public IActionResult DeleteMeal(int id)
+        {
+            try
+            {
+                Meal meal = dbContext.Meals
+                                .AsNoTracking()
+                                .First(m => m.Id == id);
+                if (meal == null)
+                    return NotFound();
+                dbContext.Remove(meal);
+                dbContext.SaveChanges();
+                return (RedirectToAction(nameof(Meals)));    
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
         public IActionResult Ingredients()
         {
             return View();

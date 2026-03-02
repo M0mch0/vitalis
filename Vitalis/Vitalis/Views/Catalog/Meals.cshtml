@@ -2,6 +2,12 @@
 @if (!Model.Any())
 {
     <p class="text-muted">No meals yet.</p>
+    <div>
+        <a class="btn btn-primary" asp-controller="Create" asp-action="Meal">
+            + Add Meal
+        </a>
+
+    </div>
 }
 else
 {
@@ -28,12 +34,20 @@ else
                     <td>@String.Join(", ", b.Ingredients.Where(mi => mi.MealId == b.Id).Select(mi => mi.Ingredient.Name))</td>
                     
                     <td style="text-align:center;">
-                        <a class="btn btn-sm btn-outline-primary align-items-end"
-                           asp-controller="Create"
-                           asp-action="Meal"
-                           asp-route-id="@b.Id">
-                            Edit
-                        </a>
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> · · ·</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-controller="Create" asp-action="Meal" asp-route-id="@b.Id">
+                                <i class="fas fa-list"></i> Edit
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-controller="Catalog" asp-action="DeleteMeal" asp-route-id="@b.Id">
+                                <i class="fas fa-plus"></i> Delete
+                            </a>
+                            <form class="dropdown-item"  asp-action="DeleteMeal" method="post">
+                                <input value="@b.Id" type="hidden" name="id"/>
+                                <button type="submit" >Delete</button>
+                            </form>
+                        </div>
                     </td>
 
                 </tr>
@@ -41,3 +55,9 @@ else
         </tbody>
     </table>
 }
+@{/*<a class="btn btn-sm btn-outline-primary align-items-end"
+   asp-controller="Create"
+   asp-action="Meal"
+   asp-route-id="@b.Id">
+    · · ·
+</a>*/}
