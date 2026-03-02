@@ -25,6 +25,22 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Catalog</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-controller="Catalog" asp-action="Meals">
+                                    <i class="fas fa-list"></i> Meals
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-controller="Catalog" asp-action="Ingredients">
+                                    <i class="fas fa-plus"></i> Ingredients
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-controller="Catalog" asp-action="Tags">
+                                    <i class="fas fa-plus"></i> Tags
+                                </a>
+                            </div>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
