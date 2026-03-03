@@ -12,6 +12,7 @@ namespace Vitalis.Models
         [MaxLength(ValidationConstants.TagNameMaxLength)]
         public string Name { get; set; } = null!;
 
+        public string? ImageUrl { get; set; }
         public virtual ICollection<Ingredient> Ingredients { get; set; } = new HashSet<Ingredient>();
         public virtual ICollection<Meal> Meals { get; set; } = new HashSet<Meal>();
     }

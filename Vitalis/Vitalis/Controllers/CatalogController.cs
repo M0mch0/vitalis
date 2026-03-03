@@ -80,10 +80,35 @@ namespace Vitalis.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
         public IActionResult Tags()
         {
-            return View();
+            ICollection<Tag> tags = dbContext.Tags
+                .OrderBy(t => t.Name)
+                .AsNoTracking()
+                .ToList();
+
+            return View(tags);
         }
 
+        [HttpPost]
+        public IActionResult DeleteTag(int id)
+        {
+            try
+            {
+                Tag? tag = dbContext.Tags
+                            .FirstOrDefault(t => t.Id == id);
+                if (tag == null)
+                    return NotFound();
+                dbContext.Remove(tag);
+                dbContext.SaveChanges();
+                return RedirectToAction(nameof(Tags));
+            }
+            catch(Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

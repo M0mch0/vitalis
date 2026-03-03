@@ -139,10 +139,21 @@ namespace Vitalis.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
         public IActionResult Tag()
         {
-            return View();
-        }
+            Tag vm = new Tag();
 
+            return View(vm);
+        }
+        [HttpPost]
+        public IActionResult Tag(Tag tag)
+        {
+
+            dbContext.Add(tag);
+            dbContext.SaveChanges();
+            return RedirectToAction("Tags", "Catalog");
+        }
     }
 }
