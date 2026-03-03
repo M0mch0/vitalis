@@ -22,7 +22,7 @@ else
     <div class="row g-3">
     @foreach(Tag tag in Model)
     {
-        <div class="col-12 col-md-3">
+        <div class="col-md-3">
             @if (!string.IsNullOrEmpty(tag.ImageUrl))
             {
                 <div style="width : 300px; height : 200px">
@@ -31,19 +31,24 @@ else
             }
             else
             {
-                <div style="width : 300px; height : 200px">
-                    <img src="~/images/default.jpg" asp-append-version="true" class="img-fluid rounded hover-zoom" alt="@tag.Name" height="300" style="object-fit : cover; width : 100%; height : 100%">
+                <div style="width : 300px; height : 200px;">
+                    <img src="~/images/default.jpg" asp-append-version="true" class="img-fluid rounded hover-zoom" alt="@tag.Name" style="object-fit : cover; width : 100%; height : 100%; align-content:center">
                 </div>
             }   
-            <div style="text-align:center;">
-
+                <div style="fill : black; text-align: center; width: 300px; background-color: lightgray">
+                    <b style="font-size: 30px">@tag.Name</b>
+                </div>
+                <div style="text-align:center; width : 300px;" class=" row g-1">
                 <form asp-action="DeleteTag" method="post">
-                <a class="btn btn-primary" asp-controller="Catalog" asp-action="Ingredients">
-                @tag.Name
+                <a class="btn btn-primary col-md-3" asp-controller="Catalog" asp-action="Ingredients">
+                    View
+                </a>
+                <a class="btn btn-secondary col-md-3" asp-controller="Create" asp-action="Tag" asp-route-id="@tag.Id">
+                    Edit
                 </a>
                 
                         <input value="@tag.Id" type="hidden" name="id" />
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger col-md-3">Delete</button>
                 </form>
             </div>
             

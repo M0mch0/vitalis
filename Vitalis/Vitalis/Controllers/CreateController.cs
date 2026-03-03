@@ -141,19 +141,38 @@ namespace Vitalis.Controllers
         }
 
         [HttpGet]
+        [Route("Create/Tag")]
         public IActionResult Tag()
         {
             Tag vm = new Tag();
 
             return View(vm);
         }
+        [HttpGet]
+        [Route("Create/Tag/{id}")]
+        public IActionResult Tag(int id)
+        {
+            Tag? vm = dbContext.Tags
+                        .FirstOrDefault(t => t.Id==id);
+
+            return View(vm);
+        }
         [HttpPost]
         public IActionResult Tag(Tag tag)
         {
-
-            dbContext.Add(tag);
+            Tag? existingTag = dbContext.Tags.FirstOrDefault(t => t.Id == tag.Id);
+            if (existingTag == null)
+                dbContext.Add(tag);
+            else
+            {
+                existingTag.Name = tag.Name;
+                existingTag.ImageUrl = tag.ImageUrl;
+            }
+                
             dbContext.SaveChanges();
+            
             return RedirectToAction("Tags", "Catalog");
         }
+        
     }
 }
