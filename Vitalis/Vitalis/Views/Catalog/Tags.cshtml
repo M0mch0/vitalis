@@ -40,7 +40,7 @@ else
                 </div>
                 <div style="text-align:center; width : 300px;" class=" row g-1">
                 <form asp-action="DeleteTag" method="post">
-                <a class="btn btn-primary col-md-3" asp-controller="Catalog" asp-action="Ingredients">
+                <a class="btn btn-primary col-md-3" asp-controller="Catalog" asp-action="ViewTag" asp-route-id="@tag.Id">
                     View
                 </a>
                 <a class="btn btn-secondary col-md-3" asp-controller="Create" asp-action="Tag" asp-route-id="@tag.Id">

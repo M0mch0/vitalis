@@ -56,7 +56,6 @@ namespace Vitalis.Controllers
                 
                 foreach (MealIngredientInput input in vm.MealIngredientInputs.Where(i => i.Selected))
                 {
-                    // Option A: attach by id only (fast)
                     MealIngredient mi = new MealIngredient
                     {
                         IngredientId = input.IngredientId,

@@ -19,6 +19,7 @@ namespace Vitalis.Controllers
         {
             return View();
         }
+        [HttpGet]
         public IActionResult Meals()
         {
             ICollection<Meal> meals = dbContext.Meals
@@ -110,5 +111,34 @@ namespace Vitalis.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        public IActionResult ViewTag(int id)
+        {
+            Tag? tag = dbContext.Tags
+                .FirstOrDefault(t => t.Id == id);
+
+            if (tag == null)
+                return NotFound();
+
+            ViewTagViewModel vm = new ViewTagViewModel
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Ingredients = dbContext.Ingredients
+                    .Where(i => i.Tags.Contains(tag))
+                    .Include(i => i.NutrientProfile)
+                    .Include(i => i.Tags)
+                    .ToList(),
+                Meals = dbContext.Meals
+                    .Where(m => m.Tags.Contains(tag))
+                    .Include(m => m.Ingredients)
+                        .ThenInclude(mi => mi.Ingredient)
+                    .ToList()
+            };
+
+            return View(vm);
+        }
+
     }
 }

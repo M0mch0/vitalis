@@ -1,0 +1,97 @@
+﻿@using Vitalis.ViewModels
+@model ViewTagViewModel
+@if (!Model.Ingredients.Any())
+{
+    <p class="text-muted">No ingredients yet.</p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th style="width: 200px;">Name</th>
+                <th style="width: 100px;">Carbohydrates</th>
+                <th style="width: 100px;">Protein</th>
+                <th style="width: 100px;">Fat</th>
+                <th>Tags</th>
+                <th style="width: 60px;"> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Ingredient ing in Model.Ingredients.ToList())
+            {
+                <tr>
+                    <td>@ing.Name</td>
+                    <td>@ing.NutrientProfile.Carbohydrates</td>
+                    <td>@ing.NutrientProfile.Protein</td>
+                    <td>@ing.NutrientProfile.Fat</td>
+                    <td>@String.Join(", ", ing.Tags.Select(t => t.Name))</td>
+
+                    <td style="text-align:center;">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> · · ·</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-controller="Create" asp-action="Meal" asp-route-id="@ing.Id">
+                                <i class="fas fa-list"></i> Edit
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form class="dropdown-item" asp-action="DeleteIngredient" method="post">
+                                <input value="@ing.Id" type="hidden" name="id" />
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (!Model.Meals.Any())
+{
+    <p class="text-muted">No meals yet.</p>
+}
+else
+{
+    <div>
+        <h1 class="mb-0">Meals</h1>
+
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th style="width: 200px;">Name</th>
+                <th>Ingredients</th>
+                <th style="width: 60px;"> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Meal b in Model.Meals.OrderBy(b => b.Name))
+            {
+                <tr>
+                    <td>@b.Name</td>
+                    @{
+                        var a = b.Ingredients.Where(mi => mi.MealId == b.Id).OrderBy(mi => mi.IngredientId).Select(mi => mi.Ingredient.Name);
+                        var c = b.Ingredients.Where(mi => mi.MealId == b.Id).OrderBy(mi => mi.IngredientId).Select(mi => mi.Quantity);
+                        var result = string.Join(", ", a.Zip(c, (x, y) => $"{x} ({y}g)"));
+                    }
+
+                    <td>@result</td>
+
+                    <td style="text-align:center;">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> · · ·</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-controller="Create" asp-action="Meal" asp-route-id="@b.Id">
+                                <b class=" btn btn-success">Edit</b>
+                            </a>
+                            <form class="dropdown-item" asp-action="DeleteMeal" method="post">
+                                <input value="@b.Id" type="hidden" name="id" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
