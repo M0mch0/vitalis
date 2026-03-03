@@ -86,9 +86,58 @@ namespace Vitalis.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet]
         public IActionResult Ingredient()
         {
-            return View();
+            var vm = new CreateIngredientViewModel
+            {
+                Tags = dbContext.Tags.
+                                OrderBy(t => t.Name)
+                                .AsNoTracking()
+                                .ToList(),
+                nutrientProfile = new NutrientProfile()
+            };
+            vm.IngredientTagInputs = vm.Tags
+                .Select(i => new IngredientTagInput { TagId = i.Id, Selected = false })
+                .ToList();
+
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Ingredient(CreateIngredientViewModel vm)
+        {
+            try
+            {
+                Ingredient ing = new Ingredient
+                {
+                    Name = vm.Name,
+                    Notes = vm.Notes,
+                    NutrientProfile = vm.nutrientProfile
+                    
+                };
+
+
+                List<int> selectedTagIds = vm.IngredientTagInputs
+                                            .Where(t => t.Selected == true)
+                                            .Select(t => t.TagId)
+                                            .ToList();
+
+                if (selectedTagIds.Count > 0)
+                {
+                    var tags = await dbContext.Tags.Where(t => selectedTagIds.Contains(t.Id)).ToListAsync();
+                    foreach (var tag in tags)
+                    {
+                        ing.Tags.Add(tag);
+                    }
+                }
+                dbContext.Ingredients.Add(ing);
+                await dbContext.SaveChangesAsync();
+                return RedirectToAction("Ingredients", "Catalog");
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
         public IActionResult Tag()
         {

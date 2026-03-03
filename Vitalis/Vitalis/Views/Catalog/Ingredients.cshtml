@@ -1,5 +1,60 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model IEnumerable<Ingredient>
+@if (!Model.Any())
+{
+    <p class="text-muted">No ingredients yet.</p>
+    <div>
+        <a class="btn btn-primary" asp-controller="Create" asp-action="Ingredient">
+            + Add Ingredient
+        </a>
+
+    </div>
+}
+else
+{
+    <div>
+        <h1 class="mb-0">Ingredients</h1>
+        <a class="btn btn-primary" asp-controller="Create" asp-action="Ingredient">
+            + Add Ingredient
+        </a>
+
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th style="width: 200px;">Name</th>
+                <th style="width: 100px;">Carbohydrates</th>
+                <th style="width: 100px;">Protein</th>
+                <th style="width: 100px;">Fat</th>
+                <th>Tags</th>
+                <th style="width: 60px;"> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Ingredient ing in Model.ToList())
+            {
+                <tr>
+                    <td>@ing.Name</td>
+                    <td>@ing.NutrientProfile.Carbohydrates</td>
+                    <td>@ing.NutrientProfile.Protein</td>
+                    <td>@ing.NutrientProfile.Fat</td>
+                    <td>@String.Join(", ", ing.Tags.Select(t => t.Name))</td>
+
+                    <td style="text-align:center;">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> · · ·</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-controller="Create" asp-action="Meal" asp-route-id="@ing.Id">
+                                <i class="fas fa-list"></i> Edit
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form class="dropdown-item" asp-action="DeleteIngredient" method="post">
+                                <input value="@ing.Id" type="hidden" name="id" />
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
 }

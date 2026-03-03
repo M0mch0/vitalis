@@ -26,26 +26,28 @@ else
                 <th style="width: 60px;"> </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody> 
             @foreach (Meal b in Model.OrderBy(b => b.Name))
             {
                 <tr>
                     <td>@b.Name</td>
-                    <td>@String.Join(", ", b.Ingredients.Where(mi => mi.MealId == b.Id).Select(mi => mi.Ingredient.Name))</td>
+                    @{
+                        var a = b.Ingredients.Where(mi => mi.MealId == b.Id).OrderBy(mi => mi.IngredientId).Select(mi => mi.Ingredient.Name);
+                        var c = b.Ingredients.Where(mi => mi.MealId == b.Id).OrderBy(mi => mi.IngredientId).Select(mi => mi.Quantity);
+                        var result = string.Join(", ", a.Zip(c, (x, y) => $"{x} ({y}g)"));
+                    }
+        
+                    <td>@result</td>
                     
                     <td style="text-align:center;">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> · · ·</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" asp-controller="Create" asp-action="Meal" asp-route-id="@b.Id">
-                                <i class="fas fa-list"></i> Edit
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" asp-controller="Catalog" asp-action="DeleteMeal" asp-route-id="@b.Id">
-                                <i class="fas fa-plus"></i> Delete
+                                <b class=" btn btn-success">Edit</b>
                             </a>
                             <form class="dropdown-item"  asp-action="DeleteMeal" method="post">
                                 <input value="@b.Id" type="hidden" name="id"/>
-                                <button type="submit" >Delete</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                         </div>
                     </td>
@@ -55,9 +57,3 @@ else
         </tbody>
     </table>
 }
-@{/*<a class="btn btn-sm btn-outline-primary align-items-end"
-   asp-controller="Create"
-   asp-action="Meal"
-   asp-route-id="@b.Id">
-    · · ·
-</a>*/}

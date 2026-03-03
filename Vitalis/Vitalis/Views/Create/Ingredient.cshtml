@@ -1,5 +1,74 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using Vitalis.ViewModels
+@model CreateIngredientViewModel
+
 @{
+    ViewData["Title"] = "Create Meal";
 }
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+
+<h1 style="text-align: center">Create Ingredient</h1>
+
+<form asp-action="Ingredient" method="post" class="row g-3">
+    <div class="col-12 col-md-3">
+        <input asp-for="Name" class="form-control" placeholder="Name" />
+    </div>
+    <div class="col-12 col-md-9">
+        <textarea asp-for="Notes" class="form-control" placeholder="Notes regarding ingredient"></textarea>
+    </div>
+
+
+    <div class="col-12 col-md-2">
+    </div>
+    <div class="col-12 col-md-4 table-container">
+        <h3 style="text-align: center">Tags</h3>
+        <table class="table table-responsive-md col-md-9 table-hover">
+            <thead>
+                <tr><th style="width: 20%">Selected</th><th style="width: 40%">Tag</th></tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Tags.Count; i++)
+                {
+                    var input = Model.Tags[i];
+                    var ingredient = Model.Tags.First(x => x.Id == input.Id);
+                    <tr>
+                        <td>
+                            <input asp-for="IngredientTagInputs[@i].Selected" />
+                            <input asp-for="IngredientTagInputs[@i].TagId" type="hidden" />
+                        </td>
+                        <td>@ingredient.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-12 col-md-4 table-container">
+        <h3 style="text-align: center">Nutrient Profile</h3>
+        <table class="table col-md-9 table-hover">
+            <thead> 
+                <tr>
+                    <th style="width: 33%; text-align: center">Carbohydrates</th>
+                    <th style="width: 33%; text-align: center">Protein</th>
+                    <th style="width: 33%; text-align: center">Fat</th>
+                </tr>   
+            </thead>
+            <tbody>
+                <tr style="text-align:center">
+                    <td><input type="number" asp-for="nutrientProfile.Carbohydrates" style=" width: 33%; border: none; outline: none; text-align: center; background: none"/></td>
+                    <td><input asp-for="nutrientProfile.Protein" style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
+                    <td><input asp-for="nutrientProfile.Fat" style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="text-align:center">
+        <button type="submit" class="btn btn-success" style="width : 100px">Create</button>
+        <a class="btn btn-secondary" asp-controller="Catalog" asp-action="Ingredients" style="width : 100px">Cancel</a>
+    </div>
+</form>

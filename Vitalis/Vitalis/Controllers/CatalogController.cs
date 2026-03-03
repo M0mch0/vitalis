@@ -51,7 +51,34 @@ namespace Vitalis.Controllers
         }
         public IActionResult Ingredients()
         {
-            return View();
+            ICollection<Ingredient> ingredients = dbContext.Ingredients
+                .Include(a => a.Tags)
+                .Include(a => a.NutrientProfile)
+                .OrderBy(a => a.Name)
+                .AsNoTracking()
+                .ToList();
+
+            return View(ingredients);
+
+        }
+        [HttpPost]
+        public IActionResult DeleteIngredient(int id)
+        {
+            try
+            {
+                Ingredient ing = dbContext.Ingredients
+                                .AsNoTracking()
+                                .First(i => i.Id == id);
+                if (ing == null)
+                    return NotFound();
+                dbContext.Remove(ing);
+                dbContext.SaveChanges();
+                return (RedirectToAction(nameof(Ingredients)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
         public IActionResult Tags()
         {
