@@ -13,7 +13,15 @@
     }
 </style>
 
-<h1 style="text-align: center">Create Ingredient</h1>
+
+@if (!string.IsNullOrEmpty(Model.Name))
+{
+    <h1 style="text-align: center">Edit Ingredient</h1>            
+}
+else{
+    <h1 style="text-align: center">Create Ingredient</h1>
+}
+
 
 <form asp-action="Ingredient" method="post" class="row g-3">
     <div class="col-12 col-md-3">
@@ -39,7 +47,7 @@
                     var ingredient = Model.Tags.First(x => x.Id == input.Id);
                     <tr>
                         <td>
-                            <input asp-for="IngredientTagInputs[@i].Selected" />
+                            <input asp-for="IngredientTagInputs[@i].Selected"  />
                             <input asp-for="IngredientTagInputs[@i].TagId" type="hidden" />
                         </td>
                         <td>@ingredient.Name</td>
@@ -60,15 +68,15 @@
             </thead>
             <tbody>
                 <tr style="text-align:center">
-                    <td><input type="number" asp-for="nutrientProfile.Carbohydrates" style=" width: 33%; border: none; outline: none; text-align: center; background: none"/></td>
-                    <td><input asp-for="nutrientProfile.Protein" style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
-                    <td><input asp-for="nutrientProfile.Fat" style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
+                    <td><input type="number" asp-for="nutrientProfile.Carbohydrates" value="@Model.nutrientProfile.Carbohydrates"  style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
+                    <td><input asp-for="nutrientProfile.Protein" value="@Model.nutrientProfile.Protein"  style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
+                    <td><input asp-for="nutrientProfile.Fat" value="@Model.nutrientProfile.Fat" style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
                 </tr>
             </tbody>
         </table>
     </div>
     <div style="text-align:center">
-        <button type="submit" class="btn btn-success" style="width : 100px">Create</button>
+        <button type="submit" class="btn btn-success" style="width : 100px">Save</button>
         <a class="btn btn-secondary" asp-controller="Catalog" asp-action="Ingredients" style="width : 100px">Cancel</a>
     </div>
 </form>

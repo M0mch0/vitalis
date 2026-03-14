@@ -6,7 +6,14 @@
     ViewData["Title"] = "Create Meal";
 }
 
-<h1 style ="text-align: center">Create Meal</h1>
+@if (!string.IsNullOrEmpty(Model.Name))
+{
+    <h1 style="text-align: center">Edit Meal</h1>
+}
+else
+{
+    <h1 style="text-align: center">Create Meal</h1>
+}
 
 <form asp-action="Meal" method="post" class="row g-3">
     <div class="col-12 col-md-3">
@@ -68,7 +75,7 @@
         </table>    
     </div>
     <div style="text-align:center">
-        <button type="submit" class="btn btn-success" style="width : 100px">Create</button>
+        <button type="submit" class="btn btn-success" style="width : 100px">Save</button>
         <a class="btn btn-secondary" asp-controller="Catalog" asp-action="Meals" style="width : 100px">Cancel</a>
     </div>
 </form>

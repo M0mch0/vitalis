@@ -10,8 +10,9 @@ namespace Vitalis.ViewModels
     }
     public class CreateIngredientViewModel
     {
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = null!;
 
+        public int Id { get; set; }
         public string? Notes { get; set; }
 
         public NutrientProfile nutrientProfile { get; set; } = new NutrientProfile();
