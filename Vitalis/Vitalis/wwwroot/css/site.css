@@ -26,3 +26,30 @@ body {
     overflow-y: auto;
     border: 1px solid #ccc;
 }
+.navbar {
+    background-size: 100% 100%;
+    background-position: 0px 0px;
+    background-image: linear-gradient(90deg, #36D3D1FF 0%, #B7F485FF 100%);
+    padding-bottom: 10px;
+    padding-top: 10px;
+    display:flex
+}
+.nav-item {
+    font-family: sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    vertical-align: middle
+}
+.navbar-brand {
+    font-family: sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-stretch: expanded;
+    font-size: 2rem;
+    padding-right:2rem
+
+}
+.navbar-text {
+    color: darkslategrey;
+    mix-blend-mode: darken
+}
