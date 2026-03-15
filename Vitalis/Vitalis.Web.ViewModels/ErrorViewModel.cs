@@ -1,4 +1,4 @@
-namespace Vitalis.Models
+namespace Vitalis.Web.ViewModels
 {
     public class ErrorViewModel
     {

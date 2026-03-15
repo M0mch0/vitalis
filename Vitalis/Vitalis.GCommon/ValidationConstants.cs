@@ -1,4 +1,4 @@
-﻿namespace Vitalis.Data
+﻿namespace Vitalis.GCommon
 {
     public static class ValidationConstants
     {

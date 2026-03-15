@@ -1,7 +1,10 @@
-﻿@using Vitalis.ViewModels
-@model ViewTagViewModel
-@if (!Model.Ingredients.Any())
+﻿@model ViewTagViewModel
+@if (Model.Ingredients is null || !Model.Ingredients.Any())
 {
+    <div>
+        <h1 class="mb-0">Ingredients</h1>
+
+    </div>
     <p class="text-muted">No ingredients yet.</p>
 }
 else
@@ -22,25 +25,34 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (Ingredient ing in Model.Ingredients.ToList())
+            @foreach (IngredientViewModel ing in Model.Ingredients.ToList())
             {
                 <tr>
                     <td>@ing.Name</td>
                     <td>@ing.NutrientProfile.Carbohydrates</td>
                     <td>@ing.NutrientProfile.Protein</td>
                     <td>@ing.NutrientProfile.Fat</td>
-                    <td>@String.Join(", ", ing.Tags.Select(t => t.Name))</td>
+                    @if(ing.Tags is null)
+                    {
+                        <td>No tags yet</td>
+                    }
+                    else 
+                    {
+                        <td>@String.Join(", ", ing.Tags.Select(t => t.Name))</td>
+                    }
+                        
 
                     <td style="text-align:center;">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> · · ·</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" asp-controller="Create" asp-action="Meal" asp-route-id="@ing.Id">
+                            <a class="dropdown-item" asp-controller="Create" asp-action="Ingredient" asp-route-id="@ing.Id" style="height:50px; text-align:center; line-height:40px">
                                 <i class="fas fa-list"></i> Edit
                             </a>
                             <div class="dropdown-divider"></div>
-                            <form class="dropdown-item" asp-action="DeleteIngredient" method="post">
-                                <input value="@ing.Id" type="hidden" name="id" />
-                                <button type="submit">Delete</button>
+                            <form class="dropdown-item btn" asp-action="DeleteIngredient" method="post" style="height:50px; text-align:center">
+                                <input value="@ing.Id" type="hidden" name="id"  />
+                                <input value="@Model.Id" type="hidden" name="TagId" />
+                                <button type="submit" class="btn">Delete</button>
                             </form>
                         </div>
                     </td>
@@ -50,8 +62,12 @@ else
         </tbody>
     </table>
 }
-@if (!Model.Meals.Any())
+@if (Model.Meals is null || !Model.Meals.Any())
 {
+    <div>
+        <h1 class="mb-0">Meals</h1>
+
+    </div>
     <p class="text-muted">No meals yet.</p>
 }
 else
@@ -69,27 +85,33 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (Meal b in Model.Meals.OrderBy(b => b.Name))
+            @foreach (MealViewModel b in Model.Meals.OrderBy(b => b.Name))
             {
                 <tr>
                     <td>@b.Name</td>
-                    @{
-                        var a = b.Ingredients.Where(mi => mi.MealId == b.Id).OrderBy(mi => mi.IngredientId).Select(mi => mi.Ingredient.Name);
-                        var c = b.Ingredients.Where(mi => mi.MealId == b.Id).OrderBy(mi => mi.IngredientId).Select(mi => mi.Quantity);
-                        var result = string.Join(", ", a.Zip(c, (x, y) => $"{x} ({y}g)"));
+                    @if (b.Ingredients is null)
+                    {
+                        <td>No ingredients listed</td>
                     }
-
-                    <td>@result</td>
+                    else
+                    {
+                        var a = b.Ingredients.Where(i => i.Selected == true).OrderBy(mi => mi.IngredientName).Select(mi => mi.IngredientName);
+                        var c = b.Ingredients.Where(mi => mi.Selected == true).OrderBy(mi => mi.IngredientName).Select(mi => mi.Quantity);
+                        var result = string.Join(", ", a.Zip(c, (x, y) => $"{x} ({y}g)"));
+                        <td>@result</td>
+                    }
 
                     <td style="text-align:center;">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> · · ·</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" asp-controller="Create" asp-action="Meal" asp-route-id="@b.Id">
-                                <b class=" btn btn-success">Edit</b>
+                            <a class="dropdown-item btn" asp-controller="Create" asp-action="Meal" asp-route-id="@b.Id" style="height:50px; text-align:center; line-height:40px">
+                                Edit
                             </a>
-                            <form class="dropdown-item" asp-action="DeleteMeal" method="post">
+                            <div class="dropdown-divider"></div>
+                            <form class="dropdown-item btn" asp-action="DeleteMeal" method="post" style="height:50px; text-align:center">
                                 <input value="@b.Id" type="hidden" name="id" />
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <input value="@Model.Id" type="hidden" name="TagId" />
+                                <button type="submit" class="btn">Delete</button>
                             </form>
                         </div>
                     </td>

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Vitalis.Data;
+using Vitalis.Services.Core;
+using Vitalis.Services.Core.Contracts;
 
 namespace Vitalis
 {
@@ -16,6 +18,10 @@ namespace Vitalis
             
             builder.Services.AddDbContext<VitalisDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
+            builder.Services.AddScoped<ICatalogService, CatalogService>();
+
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

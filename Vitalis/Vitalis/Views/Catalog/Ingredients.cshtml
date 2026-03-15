@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Ingredient>
+﻿@model IEnumerable<IngredientViewModel>
 @if (!Model.Any())
 {
     <p class="text-muted">No ingredients yet.</p>
@@ -30,25 +30,32 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (Ingredient ing in Model.ToList())
+            @foreach (IngredientViewModel ing in Model.ToList())
             {
                 <tr>
                     <td>@ing.Name</td>
                     <td>@ing.NutrientProfile.Carbohydrates</td>
                     <td>@ing.NutrientProfile.Protein</td>
                     <td>@ing.NutrientProfile.Fat</td>
-                    <td>@String.Join(", ", ing.Tags.Select(t => t.Name))</td>
-
+                    @if(ing.Tags is null || !ing.Tags.Any())
+                    {
+                        <td>No tags yet</td>
+                    }
+                    else
+                    {
+                        <td>@String.Join(", ", ing.Tags.Select(t => t.Name))</td>
+                    }
                     <td style="text-align:center;">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> · · ·</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" asp-controller="Create" asp-action="Ingredient" asp-route-id="@ing.Id">
+                            <a class="dropdown-item btn" asp-controller="Create" asp-action="Ingredient" asp-route-id="@ing.Id" style="height:50px; text-align:center; line-height:40px">
                                  Edit
                             </a>
                             <div class="dropdown-divider"></div>
-                            <form class="dropdown-item" asp-action="DeleteIngredient" method="post">
+                            <form class="dropdown-item btn" asp-action="DeleteIngredient" method="post" style="height:50px; text-align:center">
                                 <input value="@ing.Id" type="hidden" name="id" />
-                                <button type="submit">Delete</button>
+                                <input value="Ingredients" type="hidden" name="PrevAction" />
+                                <button type="submit" class="btn">Delete</button>
                             </form>
                         </div>
                     </td>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Tag>
+﻿@model IEnumerable<TagViewModel>
 @if (!Model.Any())
 {
     <p class="text-muted">No tags yet.</p>
@@ -20,7 +20,7 @@ else
 
     </div>
     <div class="row g-3">
-    @foreach(Tag tag in Model)
+    @foreach(TagViewModel tag in Model)
     {
         <div class="col-md-3">
             @if (!string.IsNullOrEmpty(tag.ImageUrl))
@@ -48,6 +48,7 @@ else
                 </a>
                 
                         <input value="@tag.Id" type="hidden" name="id" />
+                        <input value="Tags" type="hidden" name="PrevAction" />
                         <button type="submit" class="btn btn-danger col-md-3">Delete</button>
                 </form>
             </div>

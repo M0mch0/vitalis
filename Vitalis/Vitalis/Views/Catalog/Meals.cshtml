@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Meal>
+﻿@model IEnumerable<MealViewModel>
 @if (!Model.Any())
 {
     <p class="text-muted">No meals yet.</p>
@@ -27,28 +27,33 @@ else
             </tr>
         </thead>
         <tbody> 
-            @foreach (Meal b in Model.OrderBy(b => b.Name))
+            @foreach (MealViewModel b in Model.OrderBy(b => b.Name))
             {
                 <tr>
                     <td>@b.Name</td>
-                    @{
-                        var a = b.Ingredients.Where(mi => mi.MealId == b.Id).OrderBy(mi => mi.IngredientId).Select(mi => mi.Ingredient.Name);
-                        var c = b.Ingredients.Where(mi => mi.MealId == b.Id).OrderBy(mi => mi.IngredientId).Select(mi => mi.Quantity);
-                        var result = string.Join(", ", a.Zip(c, (x, y) => $"{x} ({y}g)"));
+                    @if(b.Ingredients is null)
+                    {
+                        <td>No ingredients listed</td>
                     }
-        
-                    <td>@result</td>
+                    else
+                    {
+                        var a = b.Ingredients.Where(i => i.Selected == true).OrderBy(mi => mi.IngredientName).Select(mi => mi.IngredientName);
+                        var c = b.Ingredients.Where(mi => mi.Selected == true).OrderBy(mi => mi.IngredientName).Select(mi => mi.Quantity);
+                        var result = string.Join(", ", a.Zip(c, (x, y) => $"{x} ({y}g)"));
+                        <td>@result</td>
+                    }
                     
                     <td style="text-align:center;">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> · · ·</a>
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">· · ·</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" asp-controller="Create" asp-action="Meal" asp-route-id="@b.Id">
+                            <a class="dropdown-item btn" asp-controller="Create" asp-action="Meal" asp-route-id="@b.Id" style="height:50px; text-align:center; line-height:40px">
                                 Edit
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <form class="dropdown-item"  asp-action="DeleteMeal" method="post">
+                                </a>
+                                <div class="dropdown-divider"></div>
+                            <form class="dropdown-item btn" asp-action="DeleteMeal" method="post" style="height:50px; text-align:center">
                                 <input value="@b.Id" type="hidden" name="id"/>
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <input value="Meals" type="hidden" name="PrevAction" />
+                                <button type="submit" class="btn">Delete</button>
                             </form>
                         </div>
                     </td>

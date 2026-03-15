@@ -1,9 +1,9 @@
-﻿@using Microsoft.AspNetCore.Mvc.Rendering
-@using Vitalis.ViewModels
-@model Tag
+﻿@using Vitalis.Web.ViewModels
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model TagViewModel
 
 @{
-    ViewData["Title"] = "Create Meal";
+    ViewData["Title"] = "Create Tag";
 }
 
 @if (!string.IsNullOrEmpty(Model.Name))
@@ -16,11 +16,11 @@ else
 }
 <form asp-action="Tag" method="post" class="row g-3">
     <div class="col-12 col-md-3">
-        <input asp-for="Id" method="post" class="form-control" type="hidden"/>
-        <input asp-for="Name" class="form-control" placeholder="Name" value="@Model.Name"/>
+        <input asp-for="@Model.Id" method="post" class="form-control" type="hidden"/>
+        <input asp-for="@Model.Name" class="form-control" placeholder="Name" value="@Model.Name"/>
     </div>
     <div class="col-12 col-md-9">
-        <input asp-for="ImageUrl" class="form-control" placeholder="Image Url" value="@Model.ImageUrl" />
+        <input asp-for="@Model.ImageUrl" class="form-control" placeholder="Image Url" value="@Model.ImageUrl" />
     </div>
 
     <div style="text-align:center">

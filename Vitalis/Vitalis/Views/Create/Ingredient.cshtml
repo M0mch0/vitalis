@@ -1,9 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Rendering
-@using Vitalis.ViewModels
 @model CreateIngredientViewModel
 
 @{
-    ViewData["Title"] = "Create Meal";
+    ViewData["Title"] = "Create Ingredient";
 }
 <style>
     input::-webkit-outer-spin-button,
@@ -24,6 +23,8 @@ else{
 
 
 <form asp-action="Ingredient" method="post" class="row g-3">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="NutrientProfile.Id" />    
     <div class="col-12 col-md-3">
         <input asp-for="Name" class="form-control" placeholder="Name" />
     </div>
@@ -36,25 +37,32 @@ else{
     </div>
     <div class="col-12 col-md-4 table-container">
         <h3 style="text-align: center">Tags</h3>
-        <table class="table table-responsive-md col-md-9 table-hover">
-            <thead>
-                <tr><th style="width: 20%">Selected</th><th style="width: 40%">Tag</th></tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.Tags.Count; i++)
-                {
-                    var input = Model.Tags[i];
-                    var ingredient = Model.Tags.First(x => x.Id == input.Id);
-                    <tr>
-                        <td>
-                            <input asp-for="IngredientTagInputs[@i].Selected"  />
-                            <input asp-for="IngredientTagInputs[@i].TagId" type="hidden" />
-                        </td>
-                        <td>@ingredient.Name</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        @if (Model.TagInputs is null)
+        {
+            <b>Create tags beforehand in order to select them</b>
+        }
+        else
+        {
+            <table class="table table-responsive-md col-md-9 table-hover">
+                <thead>
+                    <tr><th style="width: 20%">Selected</th><th style="width: 40%">Tag</th></tr>
+                </thead>
+                <tbody>
+
+                    @for (int i=0; i < Model.TagInputs.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                <input asp-for="@Model.TagInputs[i].Selected" />
+                                <input asp-for="@Model.TagInputs[i].TagId" type="hidden" />
+                            </td>
+                            <td>@Model.TagInputs[i].Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+            
     </div>
     <div class="col-12 col-md-4 table-container">
         <h3 style="text-align: center">Nutrient Profile</h3>
@@ -68,9 +76,9 @@ else{
             </thead>
             <tbody>
                 <tr style="text-align:center">
-                    <td><input type="number" asp-for="nutrientProfile.Carbohydrates" value="@Model.nutrientProfile.Carbohydrates"  style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
-                    <td><input asp-for="nutrientProfile.Protein" value="@Model.nutrientProfile.Protein"  style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
-                    <td><input asp-for="nutrientProfile.Fat" value="@Model.nutrientProfile.Fat" style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
+                    <td><input type="number" asp-for="@Model.NutrientProfile.Carbohydrates" value="@Model.NutrientProfile.Carbohydrates"  style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
+                    <td><input asp-for="@Model.NutrientProfile.Protein" value="@Model.NutrientProfile.Protein" style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
+                    <td><input asp-for="@Model.NutrientProfile.Fat" value="@Model.NutrientProfile.Fat" style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
                 </tr>
             </tbody>
         </table>

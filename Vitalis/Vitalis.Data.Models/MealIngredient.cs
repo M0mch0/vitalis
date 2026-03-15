@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Vitalis.Data;
-namespace Vitalis.Models
+using Vitalis.GCommon;
+namespace Vitalis.Data.Models
 {
     public class MealIngredient
     {

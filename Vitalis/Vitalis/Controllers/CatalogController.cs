@@ -1,143 +1,87 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vitalis.Data;
-using Vitalis.Models;
-using Vitalis.ViewModels;
-
+using Vitalis.Services.Core;
+using Vitalis.Services.Core.Contracts;
+using Vitalis.Web.ViewModels;
 namespace Vitalis.Controllers
 {
     public class CatalogController : Controller
     {
-        private readonly VitalisDbContext dbContext;
 
-        public CatalogController(VitalisDbContext dbContext)
+        private readonly ICatalogService catalogService;
+
+        public CatalogController(ICatalogService catalogService)
         {
-            this.dbContext = dbContext;
+            this.catalogService = catalogService;
         }
 
         public IActionResult Index()
         {
             return View();
         }
+        
+        
         [HttpGet]
-        public IActionResult Meals()
+        public async Task<IActionResult> Meals()
         {
-            ICollection<Meal> meals = dbContext.Meals
-                .Include(a => a.Ingredients)
-                .ThenInclude(a => a.Ingredient)
-                .OrderBy(a => a.Name)
-                .AsNoTracking()
-                .ToList();
-            
+            IEnumerable<MealViewModel> meals = await catalogService.GetAllMealsAsync();
             return View(meals);
         }
-        [HttpPost]
-        public IActionResult DeleteMeal(int id)
-        {
-            try
-            {
-                Meal meal = dbContext.Meals
-                                .AsNoTracking()
-                                .First(m => m.Id == id);
-                if (meal == null)
-                    return NotFound();
-                dbContext.Remove(meal);
-                dbContext.SaveChanges();
-                return (RedirectToAction(nameof(Meals)));    
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
-        }
-        public IActionResult Ingredients()
-        {
-            ICollection<Ingredient> ingredients = dbContext.Ingredients
-                .Include(a => a.Tags)
-                .Include(a => a.NutrientProfile)
-                .OrderBy(a => a.Name)
-                .AsNoTracking()
-                .ToList();
 
-            return View(ingredients);
-
-        }
-        [HttpPost]
-        public IActionResult DeleteIngredient(int id)
-        {
-            try
-            {
-                Ingredient ing = dbContext.Ingredients
-                                .AsNoTracking()
-                                .First(i => i.Id == id);
-                if (ing == null)
-                    return NotFound();
-                dbContext.Remove(ing);
-                dbContext.SaveChanges();
-                return (RedirectToAction(nameof(Ingredients)));
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
-        }
-
+        
         [HttpGet]
-        public IActionResult Tags()
+        public async Task<IActionResult> Ingredients()
         {
-            ICollection<Tag> tags = dbContext.Tags
-                .OrderBy(t => t.Name)
-                .AsNoTracking()
-                .ToList();
+            IEnumerable<IngredientViewModel> ingredients = await catalogService.GetAllIngredientsAsync();
+            return View(ingredients);
+             
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> Tags()
+        {
+            IEnumerable<TagViewModel> tags = await catalogService.GetAllTagsAsync();
 
             return View(tags);
         }
 
         [HttpPost]
-        public IActionResult DeleteTag(int id)
+        public async Task<IActionResult> DeleteMeal(int id, int TagId)
         {
-            try
-            {
-                Tag? tag = dbContext.Tags
-                            .FirstOrDefault(t => t.Id == id);
-                if (tag == null)
-                    return NotFound();
-                dbContext.Remove(tag);
-                dbContext.SaveChanges();
-                return RedirectToAction(nameof(Tags));
-            }
-            catch(Exception e)
-            {
-                return BadRequest();
-            }
+            await catalogService.DeleteTagAsync(id);
+
+            if (TagId != 0) return RedirectToAction("ViewTag", new { id =TagId });
+            else return RedirectToAction("Meals");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteIngredient(int id, int TagId)
+        {
+            await catalogService.DeleteIngredientAsync(id);
+
+            if (TagId != 0) return RedirectToAction("ViewTag", new { id = TagId });
+            else return RedirectToAction("Ingredients");
+        }
+        [HttpPost]
+
+        
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteTag(int id)
+        {
+            await catalogService.DeleteTagAsync(id);
+
+            return RedirectToAction("Tags", "Catalog");
         }
 
         [HttpGet]
-        public IActionResult ViewTag(int id)
+        public async Task<IActionResult> ViewTag(int id)
         {
-            Tag? tag = dbContext.Tags
-                .FirstOrDefault(t => t.Id == id);
+            ViewTagViewModel tagview = await catalogService.GetViewByTagAsync(id);
 
-            if (tag == null)
-                return NotFound();
-
-            ViewTagViewModel vm = new ViewTagViewModel
-            {
-                Id = tag.Id,
-                Name = tag.Name,
-                Ingredients = dbContext.Ingredients
-                    .Where(i => i.Tags.Contains(tag))
-                    .Include(i => i.NutrientProfile)
-                    .Include(i => i.Tags)
-                    .ToList(),
-                Meals = dbContext.Meals
-                    .Where(m => m.Tags.Contains(tag))
-                    .Include(m => m.Ingredients)
-                        .ThenInclude(mi => mi.Ingredient)
-                    .ToList()
-            };
-
-            return View(vm);
+            return View(tagview);
         }
 
     }

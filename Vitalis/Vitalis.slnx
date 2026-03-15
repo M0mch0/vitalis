@@ -1,3 +1,14 @@
 <Solution>
-  <Project Path="Vitalis/Vitalis.csproj" />
+  <Folder Name="/Data/">
+    <Project Path="Vitalis.Data.Models/Vitalis.Data.Models.csproj" Id="09b8c723-05e3-4a4d-b3d7-cdb5cb3bab17" />
+    <Project Path="Vitalis.Data/Vitalis.Data.csproj" Id="e8e52c4f-11ce-4eff-b280-7c7868160ec0" />
+  </Folder>
+  <Folder Name="/Services/">
+    <Project Path="Vitalis.Services.Core/Vitalis.Services.Core.csproj" Id="fa06f5c1-ad89-4ce2-b90a-814406707bba" />
+  </Folder>
+  <Folder Name="/Web/">
+    <Project Path="Vitalis.Web.ViewModels/Vitalis.Web.ViewModels.csproj" Id="b096a899-efb8-4977-97a7-ac0e5286b3c7" />
+    <Project Path="Vitalis/Vitalis.Web.csproj" />
+  </Folder>
+  <Project Path="Vitalis.GCommon/Vitalis.GCommon.csproj" Id="67ff20bb-0649-4165-90aa-0f695c44f326" />
 </Solution>
