@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<MealViewModel>
 @if (!Model.Any())
 {
-    <p class="text-muted">No meals yet.</p>
+    <p class="text-muted body-header">No meals yet.</p>
     <div>
         <a class="btn btn-primary" asp-controller="Create" asp-action="Meal">
             + Add Meal
@@ -11,55 +11,72 @@
 }
 else
 {
+
     <div>
-        <h1 class="mb-0">Meals</h1>
-        <a class="btn btn-primary" asp-controller="Create" asp-action="Meal">
+        <h1 class="mb-0 body-header">Meals</h1>
+        <a class="btn btn-view" asp-controller="Create" asp-action="Meal">
             + Add Meal
         </a>
-            
-    </div>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th style="width: 200px;">Name</th>
-                <th>Ingredients</th>
-                <th style="width: 60px;"> </th>
-            </tr>
-        </thead>
-        <tbody> 
-            @foreach (MealViewModel b in Model.OrderBy(b => b.Name))
-            {
-                <tr>
-                    <td>@b.Name</td>
-                    @if(b.Ingredients is null)
-                    {
-                        <td>No ingredients listed</td>
-                    }
-                    else
-                    {
-                        var a = b.Ingredients.Where(i => i.Selected == true).OrderBy(mi => mi.IngredientName).Select(mi => mi.IngredientName);
-                        var c = b.Ingredients.Where(mi => mi.Selected == true).OrderBy(mi => mi.IngredientName).Select(mi => mi.Quantity);
-                        var result = string.Join(", ", a.Zip(c, (x, y) => $"{x} ({y}g)"));
-                        <td>@result</td>
-                    }
-                    
-                    <td style="text-align:center;">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">· · ·</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item btn" asp-controller="Create" asp-action="Meal" asp-route-id="@b.Id" style="height:50px; text-align:center; line-height:40px">
-                                Edit
-                                </a>
-                                <div class="dropdown-divider"></div>
-                            <form class="dropdown-item btn" asp-action="DeleteMeal" method="post" style="height:50px; text-align:center">
-                                <input value="@b.Id" type="hidden" name="id"/>
-                                <input value="Meals" type="hidden" name="PrevAction" />
-                                <button type="submit" class="btn">Delete</button>
-                            </form>
-                        </div>
-                    </td>
 
-                </tr>
-            }
-        </tbody>
-    </table>
+    </div>
+    <div class="row g-3">
+        @foreach (MealViewModel meal in Model)
+        {
+            <div class="col-md-4 " style="aspect-ratio: 4/5; padding:2%">
+                @if (!string.IsNullOrEmpty(meal.ImageUrl))
+                {
+                        <img src="@meal.ImageUrl" asp-append-version="true" class="img-fluid rounded" alt="@meal.Name" style="object-fit : cover; width : 100%; height : 50%">
+                }
+                else
+                {
+                        <img src="~/images/default.jpg" asp-append-version="true" class="img-fluid rounded" alt="@meal.Name" style="object-fit : cover; width : 100%; height : 50%">
+                   
+                }
+                <div class="info-border" style="height : 50%; margin-left:3%; margin-right:3%; position:relative">
+                    <span class="body-text" style="border-bottom: 2px solid #7AE3ABFF;">@meal.Name</span>
+                    <div style="text-align:center; width :  100%; display:flex; align-items:center">
+                        @if (meal.Tags is null || !meal.Tags.Any(t => t.Selected == true))
+                        {
+                            <span class="body-text" style="font-size:1.2rem; flex:1">Tags: No tags listed</span>
+                        }
+                        else
+                        {
+                            var a = meal.Tags.Where(m => m.Selected == true).OrderBy(mi => mi.TagId).Select(mi => mi.Name);
+                            var result = string.Join(", ", a);
+                            <span class="body-text" style="font-size:1.2rem; flex:1">Tags: @result</span>
+                        }
+                    </div>
+                    <div style="text-align:center; width :  100%; display:flex; align-items:center">
+                        @if (meal.Ingredients is null || !meal.Ingredients.Any(t => t.Selected == true))
+                        {
+                            <span class="body-text" style="font-size:1.2rem; flex:1">Ingredients: No ingredients listed</span>
+                        }
+                        else
+                        {
+                            var a = meal.Ingredients.Where(m => m.Selected == true).OrderBy(mi => mi.IngredientId).Select(mi => mi.IngredientName);
+                            var b = meal.Ingredients.Where(mi => mi.Selected == true).OrderBy(mi => mi.IngredientName).Select(mi => mi.Quantity);
+                            var result = string.Join(", ", a.Zip(b, (x, y) => $"{x} ({y}g)"));
+                            <span class="body-text" style="font-size:1.2rem; flex:1">Ingredients: @result</span>
+                        }
+                    </div>
+                    <div style="text-align:center; width :  100%; position:absolute; bottom:0; padding: 1rem" class="    ">
+                        <form asp-controller="Catalog" asp-action="DeleteMeal" method="post">
+                            <a class="btn btn-view  col-md-3">
+                                View
+                            </a>
+                            <a class="btn btn-edit col-md-3" asp-controller="Create" asp-action="Meal" asp-route-id="@meal.Id">
+                                Edit
+                            </a>
+
+                            <input value="@meal.Id" type="hidden" name="id" />
+                            <input value="Meals" type="hidden" name="PrevAction" />
+                            <button type="submit" class="btn btn-delete col-md-3">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                
+
+            </div>
+        }
+    </div>
 }

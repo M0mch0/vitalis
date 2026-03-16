@@ -31,6 +31,12 @@ namespace Vitalis.Services.Core
                         IngredientName = mi.Ingredient.Name,
                         Quantity = mi.Quantity,
                         Selected = true
+                    }).ToList(),
+                    Tags = context.Tags.Select(t => new TagInputViewModel
+                    {
+                        TagId = t.Id,
+                        Name = t.Name,
+                        Selected = m.Tags.Select(tm => tm.Id).Any(tm => tm == t.Id)
                     }).ToList()
                 })
                 .ToListAsync();

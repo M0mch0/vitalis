@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<TagViewModel>
 @if (!Model.Any())
 {
-    <p class="text-muted">No tags yet.</p>
+    <p class="text-muted body-header">No tags yet.</p>
     <div>
-        <a class="btn btn-primary" asp-controller="Create" asp-action="Ingredient">
+        <a class="btn btn-primary" asp-controller="Create" asp-action="Tag">
             + Add Tag
         </a>
 
@@ -11,49 +11,46 @@
 }
 else
 {
-    
+
     <div>
-        <h1 class="mb-0">Tags</h1>
-        <a class="btn btn-primary" asp-controller="Create" asp-action="Tag">
+        <h1 class="mb-0 body-header">Tags</h1>
+        <a class="btn btn-view" asp-controller="Create" asp-action="Tag">
             + Add Tag
         </a>
 
     </div>
     <div class="row g-3">
-    @foreach(TagViewModel tag in Model)
-    {
-        <div class="col-md-3">
-            @if (!string.IsNullOrEmpty(tag.ImageUrl))
-            {
-                <div style="width : 300px; height : 200px">
-                    <img src="@tag.ImageUrl" asp-append-version="true" class="img-fluid rounded hover-zoom" alt="@tag.Name" height="300" style="object-fit : cover; width : 100%; height : 100%">
+        @foreach (TagViewModel tag in Model)
+        {
+            <div class="col-md-4 " style="aspect-ratio: 1/1; padding:2%">
+                @if (!string.IsNullOrEmpty(tag.ImageUrl))
+                {
+                    <img src="@tag.ImageUrl" asp-append-version="true" class="img-fluid rounded" alt="@tag.Name" style="object-fit : cover; width : 100%; height : 65%">
+                }
+                else
+                {
+                    <img src="~/images/default.jpg" asp-append-version="true" class="img-fluid rounded" alt="@tag.Name" style="object-fit : cover; width : 100%; height : 65%">
+
+                }
+                <div class="info-border" style="height : 35%; margin-left:3%; margin-right:3%; position:relative">
+                    <span class="body-text" style="border-bottom: 2px solid #7AE3ABFF;">@tag.Name</span>
+                    <div style="text-align:center; width :  100%; position:absolute; bottom:0; padding: 1rem" class="">
+                        <form asp-controller="Catalog" asp-action="DeleteTag" method="post">
+                            <a class="btn btn-view  col-md-3" asp-controller="Catalog" asp-action="ViewTag" asp-route-id="@tag.Id">
+                                View
+                            </a>
+                            <a class="btn btn-edit col-md-3" asp-controller="Create" asp-action="Tag" asp-route-id="@tag.Id">
+                                Edit
+                            </a>
+
+                            <input value="@tag.Id" type="hidden" name="id" />
+                            <button type="submit" class="btn btn-delete col-md-3">Delete</button>
+                        </form>
+                    </div>
                 </div>
-            }
-            else
-            {
-                <div style="width : 300px; height : 200px;">
-                    <img src="~/images/default.jpg" asp-append-version="true" class="img-fluid rounded hover-zoom" alt="@tag.Name" style="object-fit : cover; width : 100%; height : 100%; align-content:center">
-                </div>
-            }   
-                <div style="fill : black; text-align: center; width: 300px; background-color: lightgray">
-                    <b style="font-size: 30px">@tag.Name</b>
-                </div>
-                <div style="text-align:center; width : 300px;" class=" row g-1">
-                <form asp-action="DeleteTag" method="post">
-                <a class="btn btn-primary col-md-3" asp-controller="Catalog" asp-action="ViewTag" asp-route-id="@tag.Id">
-                    View
-                </a>
-                <a class="btn btn-secondary col-md-3" asp-controller="Create" asp-action="Tag" asp-route-id="@tag.Id">
-                    Edit
-                </a>
-                
-                        <input value="@tag.Id" type="hidden" name="id" />
-                        <input value="Tags" type="hidden" name="PrevAction" />
-                        <button type="submit" class="btn btn-danger col-md-3">Delete</button>
-                </form>
+
+
             </div>
-            
-        </div>
         }
     </div>
 }

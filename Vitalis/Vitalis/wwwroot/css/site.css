@@ -108,3 +108,51 @@ main {
     font-style: italic;
     font-weight: 100;
 }
+
+.info-border {
+    text-align: center;
+    justify-items: center;
+    background-color: transparent;
+    border: 2px solid #7AE3ABFF;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    height: 50%;
+    margin-left: 3%;
+    margin-right: 3%
+}
+
+.body-text {
+    display: block;
+    width: 80%;
+    align-items: center;
+    color: #7AE3ABFF;
+    font-family: sans-serif;
+    font-weight: 100;
+    font-size: 1.8rem;
+}
+
+.btn {
+    border: solid 2px #7AE3ABFF;
+    color: #7AE3ABFF;
+    font-family: monospace;
+    font-weight: 800
+}
+
+.btn-view:active, .btn-view:hover{
+    border: solid 5px #51d6f0FF;
+    color: #51d6f0FF;
+    font-family: monospace;
+    font-weight: 800;
+}
+.btn-edit:active, .btn-edit:hover{
+    border: solid 5px #84f8d7FF;
+    color: #84f8d7FF;
+    font-family: monospace;
+    font-weight: 800;
+}
+.btn-delete:active, .btn-delete:hover {
+    border: solid 5px #e85151;
+    color: #e85151;
+    font-family: monospace;
+    font-weight: 800;
+}

@@ -49,7 +49,7 @@ namespace Vitalis.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteMeal(int id, int TagId)
         {
-            await catalogService.DeleteTagAsync(id);
+            await catalogService.DeleteMealAsync(id);
 
             if (TagId != 0) return RedirectToAction("ViewTag", new { id =TagId });
             else return RedirectToAction("Meals");
@@ -64,8 +64,6 @@ namespace Vitalis.Controllers
             if (TagId != 0) return RedirectToAction("ViewTag", new { id = TagId });
             else return RedirectToAction("Ingredients");
         }
-        [HttpPost]
-
         
 
         [HttpPost]
