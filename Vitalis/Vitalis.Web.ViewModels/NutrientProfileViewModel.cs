@@ -10,6 +10,7 @@ namespace Vitalis.Web.ViewModels
 {
     public class NutrientProfileViewModel
     {
+        [Required]
         public int Id { get; set; }
 
         public int Calories => Carbohydrates * 4 + Protein * 4 + Fat * 9;

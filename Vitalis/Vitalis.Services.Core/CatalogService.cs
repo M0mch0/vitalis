@@ -449,29 +449,25 @@ namespace Vitalis.Services.Core
         public async Task DeleteMealAsync(int id)
         {
             Meal? meal = context.Meals.Find(id);
-            if (meal != null)
-            {
-                context.Meals.Remove(meal);
-                await context.SaveChangesAsync();
-            }
+            if (meal == null) return;
+
+            context.Meals.Remove(meal);
+            await context.SaveChangesAsync();
         }
         public async Task DeleteIngredientAsync(int id)
         {
             Ingredient? ing = context.Ingredients.Find(id);
-            if (ing != null)
-            {
-                context.Ingredients.Remove(ing);
-                await context.SaveChangesAsync();
-            }
+            if (ing == null) return;
+
+            context.Ingredients.Remove(ing);
+            await context.SaveChangesAsync();
         }
         public async Task DeleteTagAsync(int id)
         {
             Tag? tag = context.Tags.Find(id);
-            if (tag != null)
-            {
-                context.Tags.Remove(tag);
-                await context.SaveChangesAsync();
-            }
+            if (tag == null) return;
+            context.Tags.Remove(tag);
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -27,12 +27,14 @@ else{
     <input type="hidden" asp-for="NutrientProfile.Id" />    
     <div class="col-12 col-md-3">
         <input asp-for="Name" class="form-control" placeholder="Name" />
+        <span asp-validation-for="@Model.Name" class="text-danger"></span>
     </div>
     <div class="col-12 col-md-3">
         <input asp-for="ImageUrl" class="form-control" placeholder="Image url" />
     </div>
     <div class="col-12 col-md-6">
         <textarea asp-for="Notes" class="form-control" placeholder="Notes regarding ingredient"></textarea>
+        <span asp-validation-for="@Model.Notes" class="text-danger"></span>
     </div>
 
 
@@ -76,9 +78,18 @@ else{
             </thead>
             <tbody>
                 <tr style="text-align:center; border-bottom: solid 1px #7AE3ABFF">
-                    <td><input class="input" asp-for="@Model.NutrientProfile.Carbohydrates" value="@Model.NutrientProfile.Carbohydrates"  /></td>
-                    <td><input class="input" asp-for="@Model.NutrientProfile.Protein" value="@Model.NutrientProfile.Protein"/></td>
-                    <td><input class="input" asp-for="@Model.NutrientProfile.Fat" value="@Model.NutrientProfile.Fat"/></td>
+                    <td>
+                        <input class="input" asp-for="@Model.NutrientProfile.Carbohydrates" value="@Model.NutrientProfile.Carbohydrates"  />
+                        <span asp-validation-for="@Model.NutrientProfile.Carbohydrates" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input class="input" asp-for="@Model.NutrientProfile.Protein" value="@Model.NutrientProfile.Protein"/>
+                        <span asp-validation-for="@Model.NutrientProfile.Protein" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input class="input" asp-for="@Model.NutrientProfile.Fat" value="@Model.NutrientProfile.Fat"/>
+                        <span asp-validation-for="@Model.NutrientProfile.Fat" class="text-danger"></span>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -88,3 +99,6 @@ else{
         <a class="btn btn-delete" asp-controller="Catalog" asp-action="Ingredients" style="width : 100px">Cancel</a>
     </div>
 </form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -18,7 +18,7 @@
         public const int NutrientMaxValue = 100;
 
         //MealIngredient
-        public const double MealIngredientMinQuantity = 0.01;
+        public const double MealIngredientMinQuantity = 0;
         public const double MealIngredientMaxQuantity = 10000;
     }
 }

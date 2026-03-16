@@ -1,12 +1,20 @@
-﻿using Vitalis.Web.ViewModels;
+﻿using System.ComponentModel.DataAnnotations;
+using Vitalis.GCommon;
+using Vitalis.Web.ViewModels;
 
 namespace Vitalis.Web.ViewModels
 {
     public class CreateIngredientViewModel
     {
+        [Required]
+        public int Id { get; set; }
+
+        [Required]
+        [MaxLength(ValidationConstants.IngredientNameMaxLength)]
         public string Name { get; set; } = null!;
         public string? ImageUrl { get; set; }
-        public int Id { get; set; }
+
+        [MaxLength(ValidationConstants.IngredientNotesMaxLength)]
         public string? Notes { get; set; }
 
         public NutrientProfileViewModel NutrientProfile { get; set; } = null!;

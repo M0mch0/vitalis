@@ -18,12 +18,14 @@ else
         <input asp-for="Id" type="hidden" /> 
     <div class="col-12 col-md-3">
         <input asp-for="Name" class="form-control" placeholder="Name" />
+        <span asp-validation-for="@Model.Name" class="text-danger"></span>
     </div>
     <div class="col-12 col-md-3">
         <input asp-for="ImageUrl" class="form-control" placeholder="Image url" />
     </div>
     <div class="col-12 col-md-6">
         <textarea asp-for="Notes" class="form-control" placeholder="Notes regarding meal"></textarea>
+        <span asp-validation-for="@Model.Notes" class="text-danger"></span>
     </div>
 
     
@@ -51,6 +53,7 @@ else
 
                             <td class="col-md-4" style="border-bottom:none">
                                 <input asp-for="@Model.IngredientInputs[i].Quantity" />
+                                    
                             </td>
                         </tr>
                     }
@@ -91,3 +94,7 @@ else
         <a class="btn btn-delete" asp-controller="Catalog" asp-action="Meals" style="width : 100px">Cancel</a>
     </div>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

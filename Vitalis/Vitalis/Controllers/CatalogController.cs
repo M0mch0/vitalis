@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vitalis.Data;
 using Vitalis.Services.Core;
 using Vitalis.Services.Core.Contracts;
+using Vitalis.Web.Controllers;
 using Vitalis.Web.ViewModels;
 namespace Vitalis.Controllers
 {
-    public class CatalogController : Controller
+    public class CatalogController : BaseController
     {
 
         private readonly ICatalogService catalogService;
@@ -16,11 +18,6 @@ namespace Vitalis.Controllers
             this.catalogService = catalogService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-        
         
         [HttpGet]
         public async Task<IActionResult> Meals()

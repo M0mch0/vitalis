@@ -18,6 +18,7 @@ else
     <div class="col-12 col-md-3">
         <input asp-for="@Model.Id" method="post" class="form-control" type="hidden"/>
         <input asp-for="@Model.Name" class="form-control" placeholder="Name" value="@Model.Name"/>
+        <span asp-validation-for="@Model.Name" class="text-danger"></span>
     </div>
     <div class="col-12 col-md-9">
         <input asp-for="@Model.ImageUrl" class="form-control" placeholder="Image Url" value="@Model.ImageUrl" />
@@ -28,3 +29,6 @@ else
         <a class="btn btn-delete" asp-controller="Catalog" asp-action="Tags" style="width : 100px">Cancel</a>
     </div>
 </form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

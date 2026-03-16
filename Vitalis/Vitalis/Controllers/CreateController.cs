@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Vitalis.Data;
 using Vitalis.Data.Models;
 using Vitalis.Services.Core.Contracts;
+using Vitalis.Web.Controllers;
 using Vitalis.Web.ViewModels;
 
 namespace Vitalis.Controllers
 {
-    public class CreateController : Controller
+    public class CreateController : BaseController
     {
         private readonly ICatalogService catalogService;
 
@@ -57,6 +58,7 @@ namespace Vitalis.Controllers
         [Route("Create/Ingredient/{id}")]
         public async Task<IActionResult> Ingredient(int id)
         {
+            
             CreateIngredientViewModel vm = await catalogService.GetCreateIngredientViewModel(id);
             return View(vm);
         }
