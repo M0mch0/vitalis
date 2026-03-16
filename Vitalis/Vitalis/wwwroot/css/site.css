@@ -18,7 +18,10 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image: radial-gradient(200% 150% at 50% 50%, #17442FFF 0%, #000000FF 100%);
 }
 
 .table-container {
@@ -26,13 +29,21 @@ body {
     overflow-y: auto;
     border: 1px solid #ccc;
 }
+.container-fluid {
+    background: radial-gradient(200% 150% at 50% 50%, #17442FFF 0%, #000000FF 100%) padding-box,linear-gradient(90deg, #36D3D1FF 0%, #B7F485FF 100%) border-box;
+    border: 2px solid transparent;
+    border-radius: 10px;
+}
 .navbar {
     background-size: 100% 100%;
     background-position: 0px 0px;
-    background-image: linear-gradient(90deg, #36D3D1FF 0%, #B7F485FF 100%);
-    padding-bottom: 10px;
-    padding-top: 10px;
-    display:flex
+    background: radial-gradient(200% 150% at 50% 50%, #17442FFF 0%, #000000FF 100%) padding-box, linear-gradient(90deg, #36D3D1FF 0%, #B7F485FF 100%) border-box;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 .nav-item {
     font-family: sans-serif;
@@ -41,15 +52,37 @@ body {
     vertical-align: middle
 }
 .navbar-brand {
-    font-family: sans-serif;
+    font-family: monospace;
     font-style: italic;
-    font-weight: 900;
-    font-stretch: expanded;
+    font-weight: 300;
+    font-stretch: extra-condensed;
     font-size: 2rem;
-    padding-right:2rem
-
+    padding-right:2rem;
+    
 }
 .navbar-text {
-    color: darkslategrey;
-    mix-blend-mode: darken
+    font-family: monospace;
+    font-style: italic;
+    font-weight: 300;
+    color: #36D3D1FF;
+}
+main {
+    flex: 1;
+}
+.footer {
+    border-top-color: transparent;
+    height: 10vh;
+    background-size: 100% 100%;
+    background-position: 0px 0px;
+    background: radial-gradient(200% 150% at 50% 50%, #17442FFF 0%, #000000FF 100%) padding-box, linear-gradient(90deg, #36D3D1FF 0%, #B7F485FF 100%) border-box;
+    margin-top: auto;
+    display: flex;
+    border-top: 2px solid transparent;
+}
+.container{
+    margin:20px;
+    margin-top:auto;    
+    margin-bottom:auto;
+    flex:1;
+    text-align:left;
 }
