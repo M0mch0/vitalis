@@ -79,10 +79,32 @@ main {
     display: flex;
     border-top: 2px solid transparent;
 }
-.container{
-    margin:20px;
-    margin-top:auto;    
-    margin-bottom:auto;
-    flex:1;
-    text-align:left;
+.footer-text {
+    margin: 20px;
+    margin-top: auto;
+    margin-bottom: auto;
+    flex: 1;
+    text-align: left;
+    color: #36D3D1FF;
+    font-family: monospace;
+    font-style: italic;
+    font-weight: 300;
+}
+.dropdown-menu {
+    background-color: #17442FFF;
+    border: 2px solid #36D3D1FF;    
+}
+.a:active {
+    color: red;
+
+}
+.dropdown-item.active, .dropdown-item:hover, dropdown-item:visited, dropdown-item:link {
+    background-color: #206444
+}
+
+.body-header {
+    color: #7AE3ABFF;
+    font-family: sans-serif;
+    font-style: italic;
+    font-weight: 100;
 }
