@@ -17,6 +17,7 @@ namespace Vitalis.Web.ViewModels
 
         [MaxLength(ValidationConstants.MealNotesMaxLength)]
         public string? Notes { get; set; }
+        public string? ImageUrl { get; set; }
 
         public IEnumerable<TagInputViewModel>? Tags { get; set; }
 

@@ -15,6 +15,8 @@ namespace Vitalis.Web.ViewModels
         [MaxLength(ValidationConstants.IngredientNameMaxLength)]
         public string Name { get; set; } = null!;
 
+        public string? ImageUrl { get; set; }
+
         [Required]
         public NutrientProfileViewModel NutrientProfile { get; set; } = null!;
 

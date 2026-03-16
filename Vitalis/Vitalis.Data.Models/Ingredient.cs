@@ -15,6 +15,8 @@ namespace Vitalis.Data.Models
         [MaxLength(ValidationConstants.IngredientNotesMaxLength)]
         public string? Notes { get; set; }
 
+        public string? ImageUrl { get; set; }
+
         [Required]
         [ForeignKey(nameof(NutrientProfile))]
         public int NutrientProfileId { get; set; }

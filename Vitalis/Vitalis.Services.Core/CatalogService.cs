@@ -22,6 +22,7 @@ namespace Vitalis.Services.Core
                 .Select(m => new MealViewModel
                 {
                     Id = m.Id,
+                    ImageUrl = m.ImageUrl,
                     Name = m.Name,
                     Notes = m.Notes,
                     Ingredients = m.Ingredients.Select(mi => new IngredientInputViewModel
@@ -42,6 +43,7 @@ namespace Vitalis.Services.Core
                 .Select(i => new IngredientViewModel
                 {
                     Id = i.Id,
+                    ImageUrl = i.ImageUrl,
                     Name = i.Name,
                     Tags = i.Tags.Select(t => new TagInputViewModel
                     {
@@ -90,6 +92,7 @@ namespace Vitalis.Services.Core
                     .Select(i => new IngredientViewModel
                     {
                         Id = i.Id,
+                        ImageUrl = i.ImageUrl,
                         Name = i.Name,
                         NutrientProfile = new NutrientProfileViewModel
                         {
@@ -111,6 +114,7 @@ namespace Vitalis.Services.Core
                     {
                         Id = m.Id,
                         Name = m.Name,
+                        ImageUrl= m.ImageUrl,
                         Notes = m.Notes,
                         Ingredients = m.Ingredients.Select(mi => new IngredientInputViewModel
                         {
@@ -175,6 +179,7 @@ namespace Vitalis.Services.Core
                 Id = id,
                 Name = meal.Name,
                 Notes = meal.Notes,
+                ImageUrl = meal.ImageUrl,
                 IngredientInputs = context.Ingredients
                                 .OrderBy(i => i.Name)
                                 .AsNoTracking()
@@ -267,6 +272,7 @@ namespace Vitalis.Services.Core
                 Id = id,
                 Name = ing.Name,
                 Notes = ing.Notes,
+                ImageUrl = ing.ImageUrl,
                 NutrientProfile = new NutrientProfileViewModel
                 {
                     Carbohydrates = ing.NutrientProfile.Carbohydrates,
@@ -324,7 +330,7 @@ namespace Vitalis.Services.Core
                 context.Meals.Update(meal);
                 meal.Name = vm.Name;
                 meal.Notes = vm.Notes;
-
+                meal.ImageUrl = vm.ImageUrl;
 
                 meal.Tags.Clear();
                 if (vm.TagInputs is not null) meal.Tags = context.Tags.ToList().Where(t => vm.TagInputs
@@ -355,7 +361,8 @@ namespace Vitalis.Services.Core
                 Meal meal = new Meal
                 {
                     Name = vm.Name,
-                    Notes = vm.Notes
+                    Notes = vm.Notes,
+                    ImageUrl = vm.ImageUrl
                 };
                 if (vm.TagInputs is not null) meal.Tags = context.Tags.ToList().Where(t => vm.TagInputs
                                                                         .Where(ti => ti.Selected == true)
@@ -386,6 +393,7 @@ namespace Vitalis.Services.Core
                 Ingredient ing = context.Ingredients.Include(i => i.Tags).Include(i => i.NutrientProfile).First(i => i.Id == vm.Id);
                 ing.Name = vm.Name;
                 ing.Notes = vm.Notes;
+                ing.ImageUrl = vm.ImageUrl;
                 ing.NutrientProfile.Carbohydrates = vm.NutrientProfile.Carbohydrates;
                 ing.NutrientProfile.Fat = vm.NutrientProfile.Fat;
                 ing.NutrientProfile.Protein = vm.NutrientProfile.Protein;
@@ -404,6 +412,7 @@ namespace Vitalis.Services.Core
                 {
                     Name = vm.Name,
                     Notes = vm.Notes,
+                    ImageUrl = vm.ImageUrl,
                     NutrientProfile = new NutrientProfile
                     {
                         Carbohydrates = vm.NutrientProfile.Carbohydrates,

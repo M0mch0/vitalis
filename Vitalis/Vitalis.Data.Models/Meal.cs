@@ -14,6 +14,8 @@ namespace Vitalis.Data.Models
         [MaxLength(ValidationConstants.MealNotesMaxLength)]
         public string? Notes { get; set; }
 
+        public string? ImageUrl { get; set; }
+
         public virtual ICollection<MealIngredient> Ingredients { get; set; } = new HashSet<MealIngredient>();
 
 

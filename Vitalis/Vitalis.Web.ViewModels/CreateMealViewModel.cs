@@ -9,7 +9,7 @@ namespace Vitalis.Web.ViewModels
         public string Name { get; set; } = string.Empty;
         public string? Notes { get; set; }
 
-
+        public string? ImageUrl { get; set; }
 
         public IEnumerable<NutrientProfileViewModel>? NutrientProfiles { get; set; }
 
