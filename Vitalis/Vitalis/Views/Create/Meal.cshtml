@@ -7,47 +7,49 @@
 
 @if (!string.IsNullOrEmpty(Model.Name))
 {
-    <h1 style="text-align: center">Edit Meal</h1>
+    <h1 class="body-header"style="text-align: center">Edit Meal</h1>
 }
 else
 {
-    <h1 style="text-align: center">Create Meal</h1>
+    <h1 class="body-header"style="text-align: center">Create Meal</h1>
 }
 
-<form asp-action="Meal" method="post" class="row g-3">
+<form asp-action="Meal" method="post" class="row g-3" style="justify-content:center">
         <input asp-for="Id" type="hidden" /> 
     <div class="col-12 col-md-3">
         <input asp-for="Name" class="form-control" placeholder="Name" />
     </div>
-    <div class="col-12 col-md-9">
+    <div class="col-12 col-md-3">
+        <input asp-for="ImageUrl" class="form-control" placeholder="Image url" />
+    </div>
+    <div class="col-12 col-md-6">
         <textarea asp-for="Notes" class="form-control" placeholder="Notes regarding meal"></textarea>
     </div>
 
     
-    <div class="col-12 col-md-2">
-    </div>  
-    <div class="col-12 col-md-4 table-container">
-        <h3 style="text-align: center">Ingredients</h3>
+    <div class="col-md-4 table-container row g-3" style="justify-content: center; align-items: center">
+        <h3 class="body-text" style="text-align: center">Ingredients</h3>
         @if (Model.IngredientInputs is null)
         {
             <b>Create ingredients beforehand in order to select them</b>
         }
         else
         {
-            <table class="table table-responsive-md col-md-9 table-hover">
+            <table class="table row table-responsive-md col-md-12 table-hover" >
                 <thead>
-                    <tr><th style="width: 20%">Selected</th><th style="width: 40%">Ingredient</th><th style="width: 40%">Quantity (g)</th></tr>
+                    <tr class="row g-4"><th class="col-md-3">Selected</th><th class="col-md-4">Ingredient</th><th class="col-md-4">Quantity (g)</th></tr>
                 </thead>
                 <tbody>
                     @for (int i = 0; i < Model.IngredientInputs.Count(); i++)
                     {
-                        <tr>
-                            <td>
+                        <tr class="row g-4" style="border-bottom: solid 1px #7AE3ABFF   ">
+                            <td class="col-md-3" style="border-bottom:none">
                                 <input asp-for="@Model.IngredientInputs[i].Selected" />
                                 <input asp-for="@Model.IngredientInputs[i].IngredientId" type="hidden" />
-                            </td>
-                            <td>@Model.IngredientInputs[i].IngredientName</td>
-                            <td>
+                            </td >
+                            <td class="col-md-3" style="border-bottom:none"> @Model.IngredientInputs[i].IngredientName </td>
+
+                            <td class="col-md-4" style="border-bottom:none">
                                 <input asp-for="@Model.IngredientInputs[i].Quantity" />
                             </td>
                         </tr>
@@ -57,27 +59,27 @@ else
         }
     </div>
     
-    <div class="col-12 col-md-4 table-container">
-        <h3 style="text-align: center">Tags</h3>
+    <div class="col-md-4 table-container row g-3" style="justify-content: center; align-items: center">
+        <h3 class="body-text" style="text-align: center">Tags</h3>
         @if (Model.TagInputs is null)
         {
             <b>Create tags beforehand in order to select them</b>
         }
         else
         {
-            <table class="table table-responsive-md col-md-9 table-hover">
+            <table class="table col-md-9 table-hover">
                 <thead>
-                    <tr><th style="width: 20%">Selected</th><th style="width: 40%">Tag</th></tr>
+                    <tr><th>Selected</th><th style="text-align:right; padding-right:2rem">Tag</th></tr>
                 </thead>
                 <tbody>
                     @for (int i = 0; i < Model.TagInputs.Count(); i++)
                     {
-                        <tr>
+                        <tr style="border-bottom: solid 1px #7AE3ABFF   ">
                             <td>
                                 <input asp-for="@Model.TagInputs[i].Selected" />
                                 <input asp-for="@Model.TagInputs[i].TagId" type="hidden" />
                             </td>
-                            <td>@Model.TagInputs[i].Name</td>
+                            <td style="text-align:right; padding-right:2rem">@Model.TagInputs[i].Name</td>
                         </tr>
                     }
                 </tbody>
@@ -85,7 +87,7 @@ else
         }
     </div>
     <div style="text-align:center">
-        <button type="submit" class="btn btn-success" style="width : 100px">Save</button>
-        <a class="btn btn-secondary" asp-controller="Catalog" asp-action="Meals" style="width : 100px">Cancel</a>
+        <button type="submit" class="btn btn-edit" style="width : 100px">Save</button>
+        <a class="btn btn-delete" asp-controller="Catalog" asp-action="Meals" style="width : 100px">Cancel</a>
     </div>
 </form>

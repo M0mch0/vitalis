@@ -25,9 +25,12 @@ body {
 }
 
 .table-container {
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
-    border: 1px solid #ccc;
+    overflow-x: auto;
+    border: solid 2px #7AE3ABFF;
+    border-radius: 10px;
+    margin: 3%;
 }
 .container-fluid {
     background: radial-gradient(200% 150% at 50% 50%, #17442FFF 0%, #000000FF 100%) padding-box,linear-gradient(90deg, #36D3D1FF 0%, #B7F485FF 100%) border-box;
@@ -155,4 +158,17 @@ main {
     color: #e85151;
     font-family: monospace;
     font-weight: 800;
+}
+.table {
+    color: #7AE3ABFF;
+}
+.input {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #7AE3ABFF;
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: center;
+    background: none
 }

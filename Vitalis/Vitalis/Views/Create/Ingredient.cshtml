@@ -15,48 +15,48 @@
 
 @if (!string.IsNullOrEmpty(Model.Name))
 {
-    <h1 style="text-align: center">Edit Ingredient</h1>            
+    <h1 class="body-header" style="text-align: center">Edit Ingredient</h1>
 }
 else{
-    <h1 style="text-align: center">Create Ingredient</h1>
+    <h1 class="body-header" style="text-align: center">Create Ingredient</h1>
 }
 
 
-<form asp-action="Ingredient" method="post" class="row g-3">
+<form asp-action="Ingredient" method="post" class="row g-3" style="justify-content:center">
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="NutrientProfile.Id" />    
     <div class="col-12 col-md-3">
         <input asp-for="Name" class="form-control" placeholder="Name" />
     </div>
-    <div class="col-12 col-md-9">
+    <div class="col-12 col-md-3">
+        <input asp-for="ImageUrl" class="form-control" placeholder="Image url" />
+    </div>
+    <div class="col-12 col-md-6">
         <textarea asp-for="Notes" class="form-control" placeholder="Notes regarding ingredient"></textarea>
     </div>
 
 
-    <div class="col-12 col-md-2">
-    </div>
-    <div class="col-12 col-md-4 table-container">
-        <h3 style="text-align: center">Tags</h3>
+    <div class="col-md-4 table-container row g-3" style="justify-content: center; align-items: center">
+        <h3 class="body-text" style="text-align: center">Tags</h3>
         @if (Model.TagInputs is null)
         {
             <b>Create tags beforehand in order to select them</b>
         }
         else
         {
-            <table class="table table-responsive-md col-md-9 table-hover">
+            <table class="table col-md-9 table-hover">
                 <thead>
-                    <tr><th style="width: 20%">Selected</th><th style="width: 40%">Tag</th></tr>
+                    <tr><th>Selected</th><th style="text-align:right; padding-right:2rem">Tag</th></tr>
                 </thead>
                 <tbody>
-
                     @for (int i=0; i < Model.TagInputs.Count(); i++)
                     {
-                        <tr>
+                        <tr style="border-bottom: solid 1px #7AE3ABFF   ">
                             <td>
                                 <input asp-for="@Model.TagInputs[i].Selected" />
                                 <input asp-for="@Model.TagInputs[i].TagId" type="hidden" />
                             </td>
-                            <td>@Model.TagInputs[i].Name</td>
+                            <td style="text-align:right; padding-right:2rem">@Model.TagInputs[i].Name</td>
                         </tr>
                     }
                 </tbody>
@@ -64,9 +64,9 @@ else{
         }
             
     </div>
-    <div class="col-12 col-md-4 table-container">
-        <h3 style="text-align: center">Nutrient Profile</h3>
-        <table class="table col-md-9 table-hover">
+    <div class="col-md-4 table-container row g-3" style="justify-content: center; align-items: center; max-height: 15rem">
+        <h3 class="body-text" style="text-align: center">Nutrient Profile</h3>
+        <table class="table table-hover">
             <thead> 
                 <tr>
                     <th style="width: 33%; text-align: center">Carbohydrates</th>
@@ -75,16 +75,16 @@ else{
                 </tr>   
             </thead>
             <tbody>
-                <tr style="text-align:center">
-                    <td><input type="number" asp-for="@Model.NutrientProfile.Carbohydrates" value="@Model.NutrientProfile.Carbohydrates"  style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
-                    <td><input asp-for="@Model.NutrientProfile.Protein" value="@Model.NutrientProfile.Protein" style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
-                    <td><input asp-for="@Model.NutrientProfile.Fat" value="@Model.NutrientProfile.Fat" style=" width: 33%; border: none; outline: none; text-align: center; background: none" /></td>
+                <tr style="text-align:center; border-bottom: solid 1px #7AE3ABFF">
+                    <td><input class="input" asp-for="@Model.NutrientProfile.Carbohydrates" value="@Model.NutrientProfile.Carbohydrates"  /></td>
+                    <td><input class="input" asp-for="@Model.NutrientProfile.Protein" value="@Model.NutrientProfile.Protein"/></td>
+                    <td><input class="input" asp-for="@Model.NutrientProfile.Fat" value="@Model.NutrientProfile.Fat"/></td>
                 </tr>
             </tbody>
         </table>
     </div>
     <div style="text-align:center">
-        <button type="submit" class="btn btn-success" style="width : 100px">Save</button>
-        <a class="btn btn-secondary" asp-controller="Catalog" asp-action="Ingredients" style="width : 100px">Cancel</a>
+        <button type="submit" class="btn btn-edit" style="width : 100px">Save</button>
+        <a class="btn btn-delete" asp-controller="Catalog" asp-action="Ingredients" style="width : 100px">Cancel</a>
     </div>
 </form>
