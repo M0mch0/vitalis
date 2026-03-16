@@ -19,16 +19,23 @@ namespace Vitalis
             builder.Services.AddDbContext<VitalisDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+            })
+            .AddEntityFrameworkStores<VitalisDbContext>();
+
             builder.Services.AddScoped<ICatalogService, CatalogService>();
 
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<VitalisDbContext>();
             builder.Services.AddControllersWithViews();
 
-            WebApplication app = builder.Build();
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
