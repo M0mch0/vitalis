@@ -14,18 +14,25 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Vitalis.Data.Models;
+using Vitalis.Data;
+using System.Data.Entity;
 
 namespace Vitalis.Web.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly VitalisDbContext _context;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<ApplicationUser> userManager, VitalisDbContext context)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
+            _context = context;
         }
 
         /// <summary>
@@ -115,6 +122,12 @@ namespace Vitalis.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    if (user is not null && !await _context.JournalEntries.AnyAsync(j => j.UserId == user.Id))
+                    {
+                        _context.JournalEntries.Add(new JournalEntry { UserId = user.Id, Meals = new HashSet<JournalEntryMeal>(), Ingredients = new HashSet<JournalEntryIngredient>() });
+                        await _context.SaveChangesAsync();
+                    }
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

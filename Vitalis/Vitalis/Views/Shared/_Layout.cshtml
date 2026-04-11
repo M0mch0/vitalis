@@ -30,18 +30,23 @@
                                 <span class="navbar-text">Catalog</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-controller="Catalog" asp-action="Meals">
+                                <a class="dropdown-item" asp-area="" asp-controller="Catalog" asp-action="Meals">
                                     <span class="navbar-text">Meals</span>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-controller="Catalog" asp-action="Ingredients">
+                                <a class="dropdown-item" asp-area="" asp-controller="Catalog" asp-action="Ingredients">
                                     <span class="navbar-text">Ingredients</span>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-controller="Catalog" asp-action="Tags">
+                                <a class="dropdown-item" asp-area="" asp-controller="Catalog" asp-action="Tags">
                                     <span class="navbar-text">Tags</span>
                                 </a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Journal" asp-controller="JournalHome" asp-action="Index">
+                                <span class="navbar-text">Journal</span>
+                            </a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

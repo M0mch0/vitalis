@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Vitalis.Data;
+using Vitalis.Data.Models;
 using Vitalis.Services.Core;
 using Vitalis.Services.Core.Contracts;
 
@@ -19,7 +20,7 @@ namespace Vitalis
             builder.Services.AddDbContext<VitalisDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireDigit = false;
@@ -57,8 +58,15 @@ namespace Vitalis
             app.UseAuthorization();
 
             app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+            app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            
+
             app.MapRazorPages();
 
             app.Run();
