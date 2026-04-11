@@ -5,7 +5,7 @@ using Vitalis.Data.Models;
 
 namespace Vitalis.Data
 {
-    public class VitalisDbContext : IdentityDbContext
+    public class VitalisDbContext : IdentityDbContext<ApplicationUser>
     {
         public VitalisDbContext(DbContextOptions<VitalisDbContext> options)
             : base(options)

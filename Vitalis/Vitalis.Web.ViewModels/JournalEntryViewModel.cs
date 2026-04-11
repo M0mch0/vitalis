@@ -11,7 +11,7 @@ namespace Vitalis.Web.ViewModels
     public class JournalEntryViewModel
     {
         [Required]
-        public int Id { get; set; }
+        public string UserId { get; set; } = null!;
 
         public virtual ICollection<MealInputViewModel> Meals { get; set; } = new HashSet<MealInputViewModel>();
 
