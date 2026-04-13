@@ -1,13 +1,312 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using Vitalis.Web.ViewModels
 @model JournalEntryViewModel
 
 @{
     ViewData["Title"] = "Your Journal";
+    var availableMeals = ViewBag.AvailableMeals as IEnumerable<MealViewModel> ?? Enumerable.Empty<MealViewModel>();
+    var availableIngredients = ViewBag.AvailableIngredients as IEnumerable<IngredientViewModel> ?? Enumerable.Empty<IngredientViewModel>();
 }
 
+<div class="mb-3 d-flex justify-content-between align-items-center">
+    <h1 class="body-header">Your Journal</h1>
+    <div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">+ Add</button>
+    </div>
+</div>
 
+<div class="row">
+    <div class="col-12">
+        <h3 class="body-header">Meals</h3>
+        <table class="table" id="meals-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-end">Carbs</th>
+                    <th class="text-end">Protein</th>
+                    <th class="text-end">Fats</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.Meals is null || !Model.Meals.Any(m => m.Selected))
+                {
+                    <tr><td colspan="5" class="text-muted">No meals in your journal.</td></tr>
+                }
+                else
+                {
+                    foreach (var meal in Model.Meals.Where(m => m.Selected))
+                    {
+                        var mc = 0.0; var mp = 0.0; var mf = 0.0;
+                        if (meal.Ingredients is not null)
+                        {
+                            foreach (var ing in meal.Ingredients.Where(i => i.Selected))
+                            {
+                                mc += ing.Carbs;
+                                mp += ing.Protein;
+                                mf += ing.Fats;
+                            }
+                        }
+                        <tr data-meal-id="@meal.Id">
+                            <td>@meal.Name</td>
+                            <td class="text-end meal-carbs">@mc</td>
+                            <td class="text-end meal-protein">@mp</td>
+                            <td class="text-end meal-fats">@mf</td>
+                            <td class="text-end">
+                                <form asp-area="Journal" asp-controller="JournalHome" asp-action="RemoveFromJournal" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@meal.Id" />
+                                    <input  type="hidden" name="MealOrIng" value="true" />
+                                    <button type="submit" class="btn btn-sm btn-danger remove-meal">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Totals</th>
+                    <th class="text-end" id="meals-total-carbs">0</th>
+                    <th class="text-end" id="meals-total-protein">0</th>
+                    <th class="text-end" id="meals-total-fats">0</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 
+    <div class="col-12 mt-4">
+        <h3 class="body-header">Ingredients</h3>
+        <table class="table " id="ingredients-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th style="width:120px">Quantity (g)</th>
+                    <th class="text-end">Carbs</th>
+                    <th class="text-end">Protein</th>
+                    <th class="text-end">Fats</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.Ingredients is null || !Model.Ingredients.Any(i => i.Selected))
+                {
+                    <tr><td colspan="6" class="text-muted">No ingredients in your journal.</td></tr>
+                }
+                else
+                {
+                    foreach (var ing in Model.Ingredients.Where(i => i.Selected))
+                    {
+                        var perCarb = ing.Quantity > 0 ? ing.Carbs * ing.Quantity : 0.0;
+                        var perProt = ing.Quantity > 0 ? ing.Protein * ing.Quantity : 0.0;
+                        var perFat = ing.Quantity > 0 ? ing.Fats * ing.Quantity : 0.0;
+                        <tr data-ingredient-id="@ing.IngredientId" data-per-carb="@perCarb" data-per-protein="@perProt" data-per-fat="@perFat">
+                            <td>@ing.IngredientName</td>
+                            <td><input type="number" min="0" step="0.1" class="form-control form-control-sm ing-qty" value="@ing.Quantity" /></td>
+                            <td class="text-end ing-carbs">@ing.Carbs</td>
+                            <td class="text-end ing-protein">@ing.Protein</td>
+                            <td class="text-end ing-fats">@ing.Fats</td>
+                            <td class="text-end">
+                                <form asp-area="Journal" asp-controller="JournalHome" asp-action="RemoveFromJournal" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@ing.IngredientId" />
+                                    <input type="hidden" name="MealOrIng" value="false" />
+                                    <button type="submit" class="btn btn-sm btn-danger remove-ingredient">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Totals</th>
+                    <th></th>
+                    <th class="text-end" id="ingredients-total-carbs">0</th>
+                    <th class="text-end" id="ingredients-total-protein">0</th>
+                    <th class="text-end" id="ingredients-total-fats">0</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    <div class="col-12 mt-4">
+        <h4>Daily totals</h4>
+        <div class="d-flex gap-3">
+            <div class="p-3 border rounded">Carbs: <strong id="daily-carbs">0</strong></div>
+            <div class="p-3 border rounded">Protein: <strong id="daily-protein">0</strong></div>
+            <div class="p-3 border rounded">Fats: <strong id="daily-fats">0</strong></div>
+        </div>
+    </div>
+</div>
+
+<!-- Add modal -->
+<form asp-action="AddToJournal" method="post" class="row g-3" style="justify-content:center">
+<div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add to Journal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs" id="addTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="meals-tab" data-bs-toggle="tab" data-bs-target="#meals-panel" type="button" role="tab">Meals</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="ingredients-tab" data-bs-toggle="tab" data-bs-target="#ingredients-panel" type="button" role="tab">Ingredients</button>
+          </li>
+        </ul>
+        <div class="tab-content mt-3">
+          <div class="tab-pane fade show active" id="meals-panel" role="tabpanel">
+            <table class="table table-sm">
+              <thead>
+                <tr><th></th><th>Name</th></tr>
+              </thead>
+              <tbody>
+                @for (int i =0; i<Model.Meals.Count(); i++)
+                {
+                    if (Model.Meals[i].Selected == true) continue;
+                    <tr>
+                    <input asp-for="@Model.Meals[i].Id" type="hidden" />
+                    <input asp-for="@Model.Meals[i].Name" type="hidden" />
+                    <td><input asp-for="@Model.Meals[i].Selected" type="checkbox" class="avail-meal" data-id="@Model.Meals[i].Id" data-name="@Model.Meals[i].Name" /></td>
+                    <td>@Model.Meals[i].Name</td>
+                    </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane fade" id="ingredients-panel" role="tabpanel">
+            <table class="table table-sm">
+              <thead>
+                <tr><th></th><th>Name</th><th style="width:120px">Quantity (g)</th></tr>
+              </thead>
+              <tbody>
+                @{ var ingredients = Model.Ingredients?.ToList() ?? new List<JournalIngredientViewModel>(); }
+
+                @for (int i = 0; i < Model.Ingredients.Count(); i++)
+                {
+                    <input asp-for="@Model.Ingredients[i].IngredientId" type="hidden" />
+                    <input asp-for="@Model.Ingredients[i].IngredientName" type="hidden" />
+                    if (ingredients[i].Selected == true){
+                        Model.Ingredients[i].Selected = false;
+                        Model.Ingredients[i].Quantity = 0;
+                        continue;}
+                    <tr>
+                        <td><input asp-for="@Model.Ingredients[i].Selected" type="checkbox" class="avail-ing" data-id="@Model.Ingredients[i].IngredientId" data-name="@Model.Ingredients[i].IngredientName" /></td>
+                        <td>@Model.Ingredients[i].IngredientName</td>
+                                            <td><input type="number" class="form-control form-control-sm avail-ing-qty" value="100" data-id="@Model.Ingredients[i].Quantity" data-name="@Model.Ingredients[i].Quantity" /></td>
+                    </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="add-selected">Add Selected</button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+<script>
+    (function(){
+        function toNumber(v){ return Number((v||0)); }
+
+        function recalcTotals(){
+            // meals totals
+            let mc=0, mp=0, mf=0;
+            document.querySelectorAll('#meals-table tbody tr[data-meal-id]').forEach(r=>{
+                mc += toNumber(r.querySelector('.meal-carbs')?.textContent);
+                mp += toNumber(r.querySelector('.meal-protein')?.textContent);
+                mf += toNumber(r.querySelector('.meal-fats')?.textContent);
+            });
+            document.getElementById('meals-total-carbs').textContent = mc;
+            document.getElementById('meals-total-protein').textContent = mp;
+            document.getElementById('meals-total-fats').textContent = mf;
+
+            // ingredients totals
+            let ic=0, ip=0, ii=0;
+            document.querySelectorAll('#ingredients-table tbody tr[data-ingredient-id]').forEach(r=>{
+                ic += toNumber(r.querySelector('.ing-carbs')?.textContent);
+                ip += toNumber(r.querySelector('.ing-protein')?.textContent);
+                ii += toNumber(r.querySelector('.ing-fats')?.textContent);
+            });
+            document.getElementById('ingredients-total-carbs').textContent = ic;
+            document.getElementById('ingredients-total-protein').textContent = ip;
+            document.getElementById('ingredients-total-fats').textContent = ii;
+
+            // daily totals
+            document.getElementById('daily-carbs').textContent = mc + ic;
+            document.getElementById('daily-protein').textContent = mp + ip;
+            document.getElementById('daily-fats').textContent = mf + ii;
+        }
+
+        // handle ingredient quantity change
+        document.addEventListener('input', function(e){
+            if(e.target && e.target.classList.contains('ing-qty')){
+                const row = e.target.closest('tr');
+                const qty = toNumber(e.target.value);
+                const perC = toNumber(row.dataset.perCarb);
+                const perP = toNumber(row.dataset.perProtein);
+                const perF = toNumber(row.dataset.perFat);
+                row.querySelector('.ing-carbs').textContent = (perC * qty).toFixed(2);
+                row.querySelector('.ing-protein').textContent = (perP * qty).toFixed(2);
+                row.querySelector('.ing-fats').textContent = (perF * qty).toFixed(2);
+                recalcTotals();
+            }
+        });
+
+        // remove handlers - only remove DOM rows for non-form buttons. If button is a submit (inside a form)
+        // allow normal form submission so server-side remove runs.
+        document.addEventListener('click', function(e){
+            if(!e.target) return;
+            if(e.target.classList.contains('remove-ingredient')){
+                if (e.target.type === 'submit') return; // inside form -> allow submit
+                const row = e.target.closest('tr'); if(row) { row.remove(); recalcTotals(); }
+            }
+            if(e.target.classList.contains('remove-meal')){
+                if (e.target.type === 'submit') return; // inside form -> allow submit
+                const row = e.target.closest('tr'); if(row) { row.remove(); recalcTotals(); }
+            }
+        });
+
+        // add selected from modal
+        document.getElementById('add-selected').addEventListener('click', function(){
+            // meals
+            document.querySelectorAll('.avail-meal:checked').forEach(cb=>{
+                const id = cb.dataset.id; const name = cb.dataset.name;
+                // insert into meals table
+                const tbody = document.querySelector('#meals-table tbody');
+                const tr = document.createElement('tr'); tr.dataset.mealId = id;
+                tr.innerHTML = `<td>${name}</td><td class="text-end meal-carbs">0</td><td class="text-end meal-protein">0</td><td class="text-end meal-fats">0</td><td class="text-end"><button type="button" class="btn btn-sm btn-danger remove-meal">Remove</button></td>`;
+                tbody.appendChild(tr);
+            });
+            // ingredients
+            const ingRows = Array.from(document.querySelectorAll('.avail-ing')).map((cb,i)=>({cb,qty:document.querySelectorAll('.avail-ing-qty')[i].value}));
+            ingRows.filter(x=>x.cb.checked).forEach(x=>{
+                const id = x.cb.dataset.id; const name = x.cb.dataset.name; const qty = Number(x.qty || 0);
+                const perC = 0; const perP = 0; const perF = 0; // unknown - backend would supply precise values
+                const tbody = document.querySelector('#ingredients-table tbody');
+                const tr = document.createElement('tr'); tr.dataset.ingredientId = id; tr.dataset.perCarb = perC; tr.dataset.perProtein = perP; tr.dataset.perFat = perF;
+                tr.innerHTML = `<td>${name}</td><td><input type="number" min="0" step="0.1" class="form-control form-control-sm ing-qty" value="${qty}" /></td><td class="text-end ing-carbs">${(perC*qty).toFixed(2)}</td><td class="text-end ing-protein">${(perP*qty).toFixed(2)}</td><td class="text-end ing-fats">${(perF*qty).toFixed(2)}</td><td class="text-end"><button type="button" class="btn btn-sm btn-danger remove-ingredient">Remove</button></td>`;
+                tbody.appendChild(tr);
+            });
+
+            // close modal and recalc
+            var modalEl = document.getElementById('addModal');
+            var modal = bootstrap.Modal.getInstance(modalEl);
+            modal?.hide();
+            recalcTotals();
+        });
+
+        // initial totals
+        document.addEventListener('DOMContentLoaded', function(){ recalcTotals(); });
+    })();
+</script>

@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Vitalis.Data.Models;
 using Vitalis.Data;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Vitalis.Web.Areas.Identity.Pages.Account
 {
@@ -123,9 +123,10 @@ namespace Vitalis.Web.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     var user = await _userManager.FindByEmailAsync(Input.Email);
+                    // Use EF Core AnyAsync and compare by foreign key (UserId).
                     if (user is not null && !await _context.JournalEntries.AnyAsync(j => j.UserId == user.Id))
                     {
-                        _context.JournalEntries.Add(new JournalEntry { UserId = user.Id, Meals = new HashSet<JournalEntryMeal>(), Ingredients = new HashSet<JournalEntryIngredient>() });
+                        _context.JournalEntries.Add(new JournalEntry { UserId = user.Id, Meals = new HashSet<JournalEntryMeal>(), Ingredients = new HashSet<JournalEntryIngredient>(), User= user });
                         await _context.SaveChangesAsync();
                     }
                     return LocalRedirect(returnUrl);

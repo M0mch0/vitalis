@@ -30,7 +30,7 @@ namespace Vitalis
             .AddEntityFrameworkStores<VitalisDbContext>();
 
             builder.Services.AddScoped<ICatalogService, CatalogService>();
-
+            builder.Services.AddScoped<IJournalService, JournalService>();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddControllersWithViews();

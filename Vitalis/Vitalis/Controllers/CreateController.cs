@@ -10,7 +10,7 @@ namespace Vitalis.Controllers
 {
     public class CreateController : BaseController
     {
-        private readonly ICatalogService catalogService;
+         private readonly ICatalogService catalogService;
 
         public CreateController(ICatalogService catalogService)
         {

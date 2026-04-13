@@ -13,8 +13,8 @@ namespace Vitalis.Web.ViewModels
         [Required]
         public string UserId { get; set; } = null!;
 
-        public virtual ICollection<MealInputViewModel> Meals { get; set; } = new HashSet<MealInputViewModel>();
+        public virtual List<MealInputViewModel>? Meals { get; set; }
 
-        public virtual ICollection<IngredientInputViewModel> Ingredients { get; set; } = new HashSet<IngredientInputViewModel>();
+        public virtual List<JournalIngredientViewModel>? Ingredients { get; set; }
     }
 }

@@ -15,10 +15,7 @@ namespace Vitalis.Data.Models
         public int MealId { get; set; }
 
         [Required]
-        [Range(ValidationConstants.MealIngredientMinQuantity, ValidationConstants.MealIngredientMaxQuantity)]
-        public double Quantity { get; set; }
-
-
+        public int Amount { get; set; }
 
         [MaxLength(ValidationConstants.MealNotesMaxLength)]
         public string? Notes { get; set; }

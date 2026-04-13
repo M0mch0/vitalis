@@ -147,7 +147,8 @@ namespace Vitalis.Web.Areas.Identity.Pages.Account
                     {
                         UserId = user.Id,
                         Meals = new HashSet<JournalEntryMeal>(),
-                        Ingredients = new HashSet<JournalEntryIngredient>()
+                        Ingredients = new HashSet<JournalEntryIngredient>(),
+                        User = user
                     });
                     await _context.SaveChangesAsync();
 
