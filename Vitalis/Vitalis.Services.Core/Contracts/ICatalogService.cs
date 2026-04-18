@@ -15,6 +15,10 @@ namespace Vitalis.Services.Core.Contracts
 
         Task<ViewTagViewModel> GetViewByTagAsync(int id);
 
+        Task<IngredientViewModel> GetIngredientByIdAsync(int id);
+
+        Task<MealViewModel> GetMealByIdAsync(int id);
+
         //----------------------------------------------//
 
         Task<CreateMealViewModel> GetCreateMealViewModel();

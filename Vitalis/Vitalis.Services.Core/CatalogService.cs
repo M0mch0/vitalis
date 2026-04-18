@@ -30,7 +30,13 @@ namespace Vitalis.Services.Core
                         IngredientId = mi.IngredientId,
                         IngredientName = mi.Ingredient.Name,
                         Quantity = mi.Quantity,
-                        Selected = true
+                        Selected = true,
+                        NutrientProfile = new NutrientProfileViewModel
+                        {
+                            Carbohydrates = mi.Ingredient.NutrientProfile.Carbohydrates,
+                            Fat = mi.Ingredient.NutrientProfile.Fat,
+                            Protein = mi.Ingredient.NutrientProfile.Protein
+                        }
                     }).ToList(),
                     Tags = context.Tags.Select(t => new TagInputViewModel
                     {
@@ -127,7 +133,13 @@ namespace Vitalis.Services.Core
                             IngredientId = mi.IngredientId,
                             IngredientName = mi.Ingredient.Name,
                             Quantity = mi.Quantity,
-                            Selected = true
+                            Selected = true,
+                            NutrientProfile = new NutrientProfileViewModel
+                            {
+                                Carbohydrates = mi.Ingredient.NutrientProfile.Carbohydrates,
+                                Fat = mi.Ingredient.NutrientProfile.Fat,
+                                Protein = mi.Ingredient.NutrientProfile.Protein
+                            }
                         }).ToList(),
                         Tags = m.Tags.Select(t => new TagInputViewModel
                         {
@@ -141,6 +153,80 @@ namespace Vitalis.Services.Core
 
             return vm;
         }
+        
+        public async Task<MealViewModel> GetMealByIdAsync(int id)
+        {
+            Meal? meal = await context.Meals
+                .Include(m => m.Tags)
+                .Include(m => m.Ingredients)
+                .ThenInclude(mi => mi.Ingredient)
+                .ThenInclude(i => i.NutrientProfile)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (meal is null)
+            {
+                throw new Exception($"Meal with id {id} not found.");
+            }
+            MealViewModel vm = new MealViewModel
+            {
+                Id = meal.Id,
+                Name = meal.Name,
+                Notes = meal.Notes,
+                ImageUrl = meal.ImageUrl,
+                Ingredients = meal.Ingredients.Select(mi => new IngredientInputViewModel
+                {
+                    IngredientId = mi.IngredientId,
+                    IngredientName = mi.Ingredient.Name,
+                    Quantity = mi.Quantity,
+                    Selected = true,
+                    NutrientProfile = new NutrientProfileViewModel
+                    {
+                        Carbohydrates = mi.Ingredient.NutrientProfile.Carbohydrates,
+                        Fat = mi.Ingredient.NutrientProfile.Fat,
+                        Protein = mi.Ingredient.NutrientProfile.Protein
+                    }
+                }).ToList(),
+                Tags = meal.Tags.Select(t => new TagInputViewModel
+                {
+                    TagId = t.Id,
+                    Name = t.Name,
+                    Selected = true
+                }).ToList()
+            };
+            return vm;
+        }
+
+        public async Task<IngredientViewModel> GetIngredientByIdAsync(int id)
+        {
+            Ingredient? ing = await context.Ingredients
+                .Include(i => i.Tags)
+                .Include(i => i.NutrientProfile)
+                .FirstOrDefaultAsync(i => i.Id == id);
+            if (ing is null)
+            {
+                throw new Exception($"Ingredient with id {id} not found.");
+            }
+            IngredientViewModel vm = new IngredientViewModel
+            {
+                Id = ing.Id,
+                Name = ing.Name,
+                Notes = ing.Notes,
+                ImageUrl = ing.ImageUrl,
+                NutrientProfile = new NutrientProfileViewModel
+                {
+                    Carbohydrates = ing.NutrientProfile.Carbohydrates,
+                    Fat = ing.NutrientProfile.Fat,
+                    Protein = ing.NutrientProfile.Protein
+                },
+                Tags = ing.Tags.Select(t => new TagInputViewModel
+                {
+                    TagId = t.Id,
+                    Name = t.Name,
+                    Selected = true
+                }).ToList()
+            };
+            return vm;
+        }
+
         public async Task<CreateMealViewModel> GetCreateMealViewModel()
         {
             CreateMealViewModel vm = new CreateMealViewModel
@@ -153,7 +239,13 @@ namespace Vitalis.Services.Core
                                     IngredientId = i.Id,
                                     IngredientName = i.Name,
                                     Selected = false,
-                                    Quantity = 0
+                                    Quantity = 0,
+                                    NutrientProfile = new NutrientProfileViewModel
+                                    {
+                                        Carbohydrates = i.NutrientProfile.Carbohydrates,
+                                        Fat = i.NutrientProfile.Fat,
+                                        Protein = i.NutrientProfile.Protein
+                                    }
                                 })
                                 .ToListAsync(),
                 TagInputs = await context.Tags.
@@ -194,7 +286,13 @@ namespace Vitalis.Services.Core
                                     IngredientId = i.Id,
                                     IngredientName = i.Name,
                                     Selected = false,
-                                    Quantity = 0
+                                    Quantity = 0,
+                                    NutrientProfile = new NutrientProfileViewModel
+                                    {
+                                        Carbohydrates = i.NutrientProfile.Carbohydrates,
+                                        Fat = i.NutrientProfile.Fat,
+                                        Protein = i.NutrientProfile.Protein
+                                    }
                                 })
                                 .ToList(),
                 TagInputs = context.Tags.

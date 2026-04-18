@@ -43,6 +43,20 @@ namespace Vitalis.Controllers
             return View(tags);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ViewMeal(int id)
+        {
+            MealViewModel meal = await catalogService.GetMealByIdAsync(id);
+            return View(meal);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewIngredient(int id)
+        {
+            IngredientViewModel ingredient = await catalogService.GetIngredientByIdAsync(id);
+            return View(ingredient);
+        }
+
         [HttpPost]
         public async Task<IActionResult> DeleteMeal(int id, int TagId)
         {

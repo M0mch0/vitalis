@@ -48,7 +48,7 @@ else
                     </div>
                     <div style="text-align:center; width :  100%; position:absolute; bottom:0; padding: 1rem" class="    ">
                         <form asp-controller="Catalog" asp-action="DeleteIngredient" method="post">
-                            <a class="btn btn-view  col-md-3">
+                            <a class="btn btn-view  col-md-3" asp-controller="Catalog" asp-action="ViewIngredient" asp-route-id="@ing.Id">
                                 View
                             </a>
                             <a class="btn btn-edit col-md-3" asp-controller="Create" asp-action="Ingredient" asp-route-id="@ing.Id">

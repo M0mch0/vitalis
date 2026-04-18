@@ -18,6 +18,9 @@ namespace Vitalis.Web.ViewModels
 
         public bool Selected { get; set; }
 
+        public NutrientProfileViewModel NutrientProfile { get; set; } = null!;
+
+
         [Required]
         public double Quantity { get; set; }
     }

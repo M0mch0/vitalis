@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model IngredientViewModel
+
+@{
+    ViewData["Title"] = "View Ingredient";
+}
+
+<h1 class="body-header text-center mb-4">View Ingredient Details</h1>
+
+
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-12 col-md-4 text-center">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" asp-append-version="true" class="img-fluid rounded shadow-sm mb-2" alt="@Model.Name" style="object-fit:cover; width:100%; height:220px;" />
+                }
+                else
+                {
+                    <img src="~/images/default.jpg" asp-append-version="true" class="img-fluid rounded shadow-sm mb-2" alt="@Model.Name" style="object-fit:cover; width:100%; height:220px;" />
+                }
+                <h2 class="h5 mt-2 body-text" style="width:100%">@Model.Name</h2>
+            </div>
+
+            <div class="col-12 col-md-5">
+                <div class=" h-100 shadow-sm" style="border: solid 3px #7AE3ABFF; border-radius: 15px;text-align:center ; align-self:center">
+                    <div class="card-body">
+                        <h5 class="card-title body-text" style="width:100%"> Notes </h5>
+                        <p class="card-text body-text">@Model.Notes</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <div class=" mb-3 shadow-sm" style="border: solid 3px #7AE3ABFF; border-radius: 15px; align-self:center">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 body-text" style="font-size:1.2rem">Tags</h6>
+                        @if (Model.Tags is null || !Model.Tags.Any(t => t.Selected))
+                        {
+                            <p class="text-muted mb-0">This ingredient has no tags</p>
+                        }
+                        else
+                        {
+                            <div>
+                                @foreach (var tag in Model.Tags.Where(t => t.Selected))
+                                {
+                                    <span class="badge bg-custom me-1" style="color:#17442FFF">@tag.Name</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="shadow-sm" style="border: solid 3px #7AE3ABFF; border-radius: 15px;text-align:center ; align-self:center">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-3 body-text" style="font-size:1.1rem; width: 100%">Nutrient Profile (per 100g)</h6>
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Carbs</th>
+                                    <th class="text-center">Protein</th>
+                                    <th class="text-center">Fats</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center">@Model.NutrientProfile.Carbohydrates</td>
+                                    <td class="text-center">@Model.NutrientProfile.Protein</td>
+                                    <td class="text-center">@Model.NutrientProfile.Fat</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

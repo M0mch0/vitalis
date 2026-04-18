@@ -172,3 +172,7 @@ main {
     text-align: center;
     background: none
 }
+.bg-custom {
+    --bs-bg-opacity: 1;
+    background-color: #7AE3ABFF
+}
