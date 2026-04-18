@@ -23,6 +23,8 @@ namespace Vitalis.Services.Core
         {
             var journal = await context.JournalEntries
                 .Include(j => j.Meals)
+                .ThenInclude(m =>m.Meal)
+                .ThenInclude(mm => mm.Ingredients)
                 .Include(j => j.Ingredients)
                 .FirstAsync(je => je.UserId == userId);
 
@@ -48,7 +50,18 @@ namespace Vitalis.Services.Core
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Selected = journal.Meals.Select(tm => tm.MealId).Any(tm => tm == m.Id)
+                    Selected = journal.Meals.Select(tm => tm.MealId).Any(tm => tm == m.Id),
+                    Ingredients = context.Ingredients.Select(i=> new JournalIngredientViewModel
+                    {
+                        IngredientId = i.Id,
+                        Carbs = i.NutrientProfile.Carbohydrates,
+                        Protein = i.NutrientProfile.Protein,
+                        Fats = i.NutrientProfile.Fat,
+                        IngredientName = i.Name,
+                        Quantity = 0,
+                        Selected = false
+                    }).ToList(),
+                    Amount = 0
                 }).ToList(),
                 Ingredients = ingredients.Select(i => new JournalIngredientViewModel
                 {
@@ -61,6 +74,34 @@ namespace Vitalis.Services.Core
                     Fats = i.Fats
                 }).ToList()
             };
+            if (journal.Meals is not null)
+            {
+                foreach (MealInputViewModel meal in journalvm.Meals)
+                {
+                    // Find the matching JournalEntryMeal for this meal (if any)
+                    var jm = journal.Meals.FirstOrDefault(m => m.MealId == meal.Id);
+                    if (jm == null) continue; // not in the journal -> skip
+
+                    ICollection<MealIngredient>? mi = jm.Meal?.Ingredients;
+                    if (meal.Ingredients is null) continue;
+
+                    if (mi is not null && mi.Any())
+                    {
+                        meal.Ingredients
+                            .Where(ing => mi.Any(i => i.IngredientId == ing.IngredientId))
+                            .ToList()
+                            .ForEach(i => i.Selected = true);
+
+                        meal.Ingredients
+                            .Where(ing => mi.Any(i => i.IngredientId == ing.IngredientId))
+                            .ToList()
+                            .ForEach(i => i.Quantity = mi.First(ing => ing.IngredientId == i.IngredientId).Quantity);
+                    }
+
+                    meal.Amount = jm.Amount;
+                }
+            }
+            
             return journalvm;
         }
 
@@ -141,6 +182,35 @@ namespace Vitalis.Services.Core
              }
             await context.SaveChangesAsync();
              return;
+        }
+
+        public async Task UpdateQuantityAsync(string userId, int id, double quantity)
+        {
+            var journal = await context.JournalEntries
+                .Include(j => j.Ingredients)
+                .FirstAsync(je => je.UserId == userId);
+            var ingredientToUpdate = journal.Ingredients.FirstOrDefault(i => i.IngredientId == id);
+            if (ingredientToUpdate != null)
+            {
+                ingredientToUpdate.Quantity = quantity;
+                context.JournalEntryIngredients.Update(ingredientToUpdate);
+                await context.SaveChangesAsync();
+            }
+             return;
+        }
+        public async Task UpdateAmountAsync(string userId, int id, int amount)
+        {
+            var journal = await context.JournalEntries
+                .Include(j => j.Meals)
+                .FirstAsync(je => je.UserId == userId);
+            var mealToUpdate = journal.Meals.FirstOrDefault(i => i.MealId == id);
+            if (mealToUpdate != null)
+            {
+                mealToUpdate.Amount = amount;
+                context.JournalEntryMeals.Update(mealToUpdate);
+                await context.SaveChangesAsync();
+            }
+            return;
         }
     }
 }

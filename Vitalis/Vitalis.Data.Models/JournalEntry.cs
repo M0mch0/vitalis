@@ -19,8 +19,8 @@ namespace Vitalis.Data.Models
         [ForeignKey(nameof(UserId))]
         public virtual ApplicationUser User { get; set; } = null!;
 
-        public virtual ICollection<JournalEntryMeal> Meals { get; set; } = new HashSet<JournalEntryMeal>();
+        public virtual ICollection<JournalEntryMeal>? Meals { get; set; } = new HashSet<JournalEntryMeal>();
 
-        public virtual ICollection<JournalEntryIngredient> Ingredients { get; set; } = new HashSet<JournalEntryIngredient>();
+        public virtual ICollection<JournalEntryIngredient>? Ingredients { get; set; } = new HashSet<JournalEntryIngredient>();
     }
 }

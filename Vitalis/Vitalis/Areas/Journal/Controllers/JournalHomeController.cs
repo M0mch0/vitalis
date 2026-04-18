@@ -46,5 +46,24 @@ namespace Vitalis.Web.Areas.Journal.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateQuantity(int id, double quantity)
+        {
+             await journalService.UpdateQuantityAsync(User.Identity.GetUserId(), id, quantity);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateAmount(int id, int amount)
+        {
+            await journalService.UpdateAmountAsync(User.Identity.GetUserId(), id, amount);
+
+            return RedirectToAction("Index");
+        }
     }
 }

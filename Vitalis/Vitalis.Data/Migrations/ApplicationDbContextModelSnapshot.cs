@@ -34,7 +34,7 @@ namespace Vitalis.Data.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("IngredientTag");
+                    b.ToTable("IngredientTag", (string)null);
                 });
 
             modelBuilder.Entity("MealTag", b =>
@@ -49,7 +49,7 @@ namespace Vitalis.Data.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("MealTag");
+                    b.ToTable("MealTag", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -281,7 +281,7 @@ namespace Vitalis.Data.Migrations
 
                     b.HasIndex("NutrientProfileId");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("Vitalis.Data.Models.JournalEntry", b =>
@@ -301,7 +301,7 @@ namespace Vitalis.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("JournalEntries");
+                    b.ToTable("JournalEntries", (string)null);
                 });
 
             modelBuilder.Entity("Vitalis.Data.Models.JournalEntryIngredient", b =>
@@ -323,7 +323,7 @@ namespace Vitalis.Data.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("JournalEntryIngredients");
+                    b.ToTable("JournalEntryIngredients", (string)null);
                 });
 
             modelBuilder.Entity("Vitalis.Data.Models.JournalEntryMeal", b =>
@@ -345,7 +345,7 @@ namespace Vitalis.Data.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("JournalEntryMeals");
+                    b.ToTable("JournalEntryMeals", (string)null);
                 });
 
             modelBuilder.Entity("Vitalis.Data.Models.Meal", b =>
@@ -370,7 +370,7 @@ namespace Vitalis.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Meals");
+                    b.ToTable("Meals", (string)null);
                 });
 
             modelBuilder.Entity("Vitalis.Data.Models.MealIngredient", b =>
@@ -396,7 +396,7 @@ namespace Vitalis.Data.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("MealIngredients");
+                    b.ToTable("MealIngredients", (string)null);
                 });
 
             modelBuilder.Entity("Vitalis.Data.Models.NutrientProfile", b =>
@@ -418,7 +418,7 @@ namespace Vitalis.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NutrientProfiles");
+                    b.ToTable("NutrientProfiles", (string)null);
                 });
 
             modelBuilder.Entity("Vitalis.Data.Models.Tag", b =>
@@ -439,7 +439,7 @@ namespace Vitalis.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("IngredientTag", b =>

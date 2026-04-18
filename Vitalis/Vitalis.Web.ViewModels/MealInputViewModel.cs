@@ -7,6 +7,7 @@
 
         public bool Selected { get; set; }
 
+        public int Amount { get; set; }
         public IEnumerable<JournalIngredientViewModel>? Ingredients { get; set; }
     }
 }
