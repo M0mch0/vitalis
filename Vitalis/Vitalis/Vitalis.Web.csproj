@@ -24,6 +24,7 @@
     <ProjectReference Include="..\Vitalis.Data\Vitalis.Data.csproj" />
     <ProjectReference Include="..\Vitalis.GCommon\Vitalis.GCommon.csproj" />
     <ProjectReference Include="..\Vitalis.Services.Core\Vitalis.Services.Core.csproj" />
+    <ProjectReference Include="..\Vitalis.Web.Infrastructure1\Vitalis.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\Vitalis.Web.ViewModels\Vitalis.Web.ViewModels.csproj" />
   </ItemGroup>
 

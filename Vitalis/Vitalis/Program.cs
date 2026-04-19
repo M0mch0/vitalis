@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Vitalis.Data;
 using Vitalis.Data.Models;
+using Vitalis.Data.Seeding;
+using Vitalis.Data.Seeding.Contracts;
 using Vitalis.Services.Core;
 using Vitalis.Services.Core.Contracts;
-
+using Vitalis.Web.Infrastructure.Extensions;
 namespace Vitalis
 {
     public class Program
@@ -27,10 +29,14 @@ namespace Vitalis
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
             })
+            .AddRoles<IdentityRole<Guid>>()
+            .AddRoleManager<RoleManager<IdentityRole<Guid>>>()
             .AddEntityFrameworkStores<VitalisDbContext>();
 
             builder.Services.AddScoped<ICatalogService, CatalogService>();
             builder.Services.AddScoped<IJournalService, JournalService>();
+
+            builder.Services.AddTransient<IIdentitySeeder, IdentitySeeder>();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddControllersWithViews();
@@ -54,7 +60,12 @@ namespace Vitalis
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseRolesSeeder();
+            app.UseAdminUserSeeder();
+
 
             app.MapControllerRoute(
                 name: "areas",

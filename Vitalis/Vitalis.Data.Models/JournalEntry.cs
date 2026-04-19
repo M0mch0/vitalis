@@ -14,7 +14,7 @@ namespace Vitalis.Data.Models
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; } = null!;
+        public Guid UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
         public virtual ApplicationUser User { get; set; } = null!;

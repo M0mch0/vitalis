@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Vitalis.Data.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser<Guid>
     {
         public virtual JournalEntry? JournalEntry { get; set; }
     }

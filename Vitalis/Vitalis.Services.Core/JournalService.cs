@@ -26,7 +26,7 @@ namespace Vitalis.Services.Core
                 .ThenInclude(m =>m.Meal)
                 .ThenInclude(mm => mm.Ingredients)
                 .Include(j => j.Ingredients)
-                .FirstAsync(je => je.UserId == userId);
+                .FirstAsync(je => je.UserId == Guid.Parse(userId));
 
             var journalIngredientMap = journal.Ingredients
                 .ToDictionary(ji => ji.IngredientId, ji => ji.Quantity);
@@ -110,7 +110,7 @@ namespace Vitalis.Services.Core
               var journal = await context.JournalEntries
                 .Include(j => j.Meals)
                 .Include(j => j.Ingredients)
-                .FirstAsync(je => je.UserId == userId);
+                .FirstAsync(je => je.UserId == Guid.Parse(userId));
             if(input.Meals is not null)
             {
                 foreach (var meal in input.Meals.Where(m => m.Selected))
@@ -161,7 +161,7 @@ namespace Vitalis.Services.Core
             var journal = await context.JournalEntries
                 .Include(j => j.Meals)
                 .Include(j => j.Ingredients)
-                .FirstAsync(je => je.UserId == userId);
+                .FirstAsync(je => je.UserId == Guid.Parse(userId));
             if (MealOrIng)
             {
                 var mealToRemove = journal.Meals.FirstOrDefault(m => m.MealId == id);
@@ -188,7 +188,7 @@ namespace Vitalis.Services.Core
         {
             var journal = await context.JournalEntries
                 .Include(j => j.Ingredients)
-                .FirstAsync(je => je.UserId == userId);
+                .FirstAsync(je => je.UserId == Guid.Parse(userId));
             var ingredientToUpdate = journal.Ingredients.FirstOrDefault(i => i.IngredientId == id);
             if (ingredientToUpdate != null)
             {
@@ -202,7 +202,7 @@ namespace Vitalis.Services.Core
         {
             var journal = await context.JournalEntries
                 .Include(j => j.Meals)
-                .FirstAsync(je => je.UserId == userId);
+                .FirstAsync(je => je.UserId == Guid.Parse(userId));
             var mealToUpdate = journal.Meals.FirstOrDefault(i => i.MealId == id);
             if (mealToUpdate != null)
             {
