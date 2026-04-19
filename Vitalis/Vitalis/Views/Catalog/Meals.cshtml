@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<MealViewModel>
 @if (!Model.Any())
 {
-    <p class="text-muted body-header">No meals yet.</p>
+    <h3 class="body-header">No meals yet.</h3>
     <div>
         <a class="btn btn-primary" asp-controller="Create" asp-action="Meal">
             + Add Meal
@@ -59,7 +59,7 @@ else
                             <span class="body-text" style="font-size:1.2rem; flex:1">Ingredients: @result</span>
                         }
                     </div>
-                    <div style="text-align:center; width :  100%; position:absolute; bottom:0; padding: 1rem" class="    ">
+                    <div style="text-align:center; width :  100%; position:absolute; bottom:0; padding: 1rem">
                         <form asp-controller="Catalog" asp-action="DeleteMeal" method="post">
                             <a class="btn btn-view  col-md-3" asp-controller="Catalog" asp-action="ViewMeal" asp-route-id="@meal.Id">
                                 View

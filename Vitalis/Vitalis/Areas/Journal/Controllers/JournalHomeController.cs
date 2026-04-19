@@ -19,9 +19,9 @@ namespace Vitalis.Web.Areas.Journal.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            if (User.Identity.GetUserId() is null) return RedirectToAction("Login", "Account", new { area = "Identity" });
             var vm = await journalService.GetJournalEntryAsync(User.Identity.GetUserId());
 
-            // also provide available meals and ingredients for the add-popup
             var meals = await catalogService.GetAllMealsAsync();
             var ingredients = await catalogService.GetAllIngredientsAsync();
 

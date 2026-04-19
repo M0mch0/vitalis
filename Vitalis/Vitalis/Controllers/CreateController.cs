@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vitalis.Data;
 using Vitalis.Data.Models;
@@ -47,6 +48,7 @@ namespace Vitalis.Controllers
 
         [HttpGet]
         [Route("Create/Ingredient")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Ingredient()
         {
             CreateIngredientViewModel vm = await catalogService.GetCreateIngredientViewModel();
@@ -56,6 +58,7 @@ namespace Vitalis.Controllers
 
         [HttpGet]
         [Route("Create/Ingredient/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Ingredient(int id)
         {
             
@@ -65,6 +68,7 @@ namespace Vitalis.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Ingredient(CreateIngredientViewModel vm)
         {
             await catalogService.AddIngredientAsync(vm);
@@ -74,6 +78,7 @@ namespace Vitalis.Controllers
 
         [HttpGet]
         [Route("Create/Tag")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Tag()
         {
             TagViewModel vm = await catalogService.GetCreateTagViewModel();
@@ -84,6 +89,7 @@ namespace Vitalis.Controllers
 
         [HttpGet]
         [Route("Create/Tag/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Tag(int id)
         {
             TagViewModel vm = await catalogService.GetCreateTagViewModel(id);
@@ -93,6 +99,7 @@ namespace Vitalis.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Tag(TagViewModel tag)
         {
             await catalogService.AddTagAsync(tag);
