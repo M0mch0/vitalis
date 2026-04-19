@@ -23,11 +23,19 @@ namespace Vitalis.Data.Repository
                 .ThenInclude(mi => mi.Ingredient)
                 .ThenInclude(i => i.NutrientProfile)
                 .Include(m => m.Tags)
+                .ThenInclude(t => t.Tag)
                 .ToArrayAsync();
         }
         public async Task<Meal> GetByIdAsync(int id)
         {
-            return await Context.Meals.FirstOrDefaultAsync(m => m.Id == id);
+            return await Context
+                .Meals
+                .Include(m => m.Tags)
+                .ThenInclude(t => t.Tag)
+                .Include(m => m.Ingredients)
+                .ThenInclude(mi => mi.Ingredient)
+                .ThenInclude(i => i.NutrientProfile)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
         }
 

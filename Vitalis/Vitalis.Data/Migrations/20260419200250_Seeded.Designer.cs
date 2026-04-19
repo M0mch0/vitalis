@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vitalis.Data;
 
@@ -11,9 +12,11 @@ using Vitalis.Data;
 namespace Vitalis.Data.Migrations
 {
     [DbContext(typeof(VitalisDbContext))]
-    partial class VitalisDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260419200250_Seeded")]
+    partial class Seeded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,250 @@ namespace Vitalis.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("IngredientTag", b =>
+                {
+                    b.Property<int>("IngredientsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IngredientsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("IngredientTag");
+
+                    b.HasData(
+                        new
+                        {
+                            IngredientsId = 1,
+                            TagsId = 1
+                        },
+                        new
+                        {
+                            IngredientsId = 1,
+                            TagsId = 8
+                        },
+                        new
+                        {
+                            IngredientsId = 1,
+                            TagsId = 9
+                        },
+                        new
+                        {
+                            IngredientsId = 2,
+                            TagsId = 2
+                        },
+                        new
+                        {
+                            IngredientsId = 2,
+                            TagsId = 7
+                        },
+                        new
+                        {
+                            IngredientsId = 2,
+                            TagsId = 8
+                        },
+                        new
+                        {
+                            IngredientsId = 3,
+                            TagsId = 4
+                        },
+                        new
+                        {
+                            IngredientsId = 3,
+                            TagsId = 8
+                        },
+                        new
+                        {
+                            IngredientsId = 4,
+                            TagsId = 3
+                        },
+                        new
+                        {
+                            IngredientsId = 4,
+                            TagsId = 8
+                        },
+                        new
+                        {
+                            IngredientsId = 5,
+                            TagsId = 1
+                        },
+                        new
+                        {
+                            IngredientsId = 5,
+                            TagsId = 3
+                        },
+                        new
+                        {
+                            IngredientsId = 6,
+                            TagsId = 1
+                        },
+                        new
+                        {
+                            IngredientsId = 6,
+                            TagsId = 3
+                        },
+                        new
+                        {
+                            IngredientsId = 6,
+                            TagsId = 8
+                        },
+                        new
+                        {
+                            IngredientsId = 7,
+                            TagsId = 2
+                        },
+                        new
+                        {
+                            IngredientsId = 7,
+                            TagsId = 4
+                        },
+                        new
+                        {
+                            IngredientsId = 8,
+                            TagsId = 4
+                        },
+                        new
+                        {
+                            IngredientsId = 8,
+                            TagsId = 8
+                        },
+                        new
+                        {
+                            IngredientsId = 9,
+                            TagsId = 1
+                        },
+                        new
+                        {
+                            IngredientsId = 9,
+                            TagsId = 6
+                        },
+                        new
+                        {
+                            IngredientsId = 10,
+                            TagsId = 2
+                        },
+                        new
+                        {
+                            IngredientsId = 10,
+                            TagsId = 1
+                        },
+                        new
+                        {
+                            IngredientsId = 10,
+                            TagsId = 7
+                        },
+                        new
+                        {
+                            IngredientsId = 11,
+                            TagsId = 3
+                        },
+                        new
+                        {
+                            IngredientsId = 11,
+                            TagsId = 8
+                        },
+                        new
+                        {
+                            IngredientsId = 12,
+                            TagsId = 3
+                        },
+                        new
+                        {
+                            IngredientsId = 12,
+                            TagsId = 1
+                        },
+                        new
+                        {
+                            IngredientsId = 13,
+                            TagsId = 5
+                        },
+                        new
+                        {
+                            IngredientsId = 13,
+                            TagsId = 8
+                        },
+                        new
+                        {
+                            IngredientsId = 14,
+                            TagsId = 2
+                        },
+                        new
+                        {
+                            IngredientsId = 14,
+                            TagsId = 7
+                        });
+                });
+
+            modelBuilder.Entity("MealTag", b =>
+                {
+                    b.Property<int>("MealsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MealsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("MealTag");
+
+                    b.HasData(
+                        new
+                        {
+                            MealsId = 1,
+                            TagsId = 1
+                        },
+                        new
+                        {
+                            MealsId = 1,
+                            TagsId = 2
+                        },
+                        new
+                        {
+                            MealsId = 1,
+                            TagsId = 8
+                        },
+                        new
+                        {
+                            MealsId = 2,
+                            TagsId = 1
+                        },
+                        new
+                        {
+                            MealsId = 2,
+                            TagsId = 3
+                        },
+                        new
+                        {
+                            MealsId = 2,
+                            TagsId = 8
+                        },
+                        new
+                        {
+                            MealsId = 3,
+                            TagsId = 2
+                        },
+                        new
+                        {
+                            MealsId = 3,
+                            TagsId = 5
+                        },
+                        new
+                        {
+                            MealsId = 4,
+                            TagsId = 3
+                        },
+                        new
+                        {
+                            MealsId = 4,
+                            TagsId = 6
+                        });
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
@@ -367,183 +614,6 @@ namespace Vitalis.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Vitalis.Data.Models.IngredientTag", b =>
-                {
-                    b.Property<int>("IngredientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("IngredientId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("IngredientTags");
-
-                    b.HasData(
-                        new
-                        {
-                            IngredientId = 1,
-                            TagId = 1
-                        },
-                        new
-                        {
-                            IngredientId = 1,
-                            TagId = 8
-                        },
-                        new
-                        {
-                            IngredientId = 1,
-                            TagId = 9
-                        },
-                        new
-                        {
-                            IngredientId = 2,
-                            TagId = 2
-                        },
-                        new
-                        {
-                            IngredientId = 2,
-                            TagId = 7
-                        },
-                        new
-                        {
-                            IngredientId = 2,
-                            TagId = 8
-                        },
-                        new
-                        {
-                            IngredientId = 3,
-                            TagId = 4
-                        },
-                        new
-                        {
-                            IngredientId = 3,
-                            TagId = 8
-                        },
-                        new
-                        {
-                            IngredientId = 4,
-                            TagId = 3
-                        },
-                        new
-                        {
-                            IngredientId = 4,
-                            TagId = 8
-                        },
-                        new
-                        {
-                            IngredientId = 5,
-                            TagId = 1
-                        },
-                        new
-                        {
-                            IngredientId = 5,
-                            TagId = 3
-                        },
-                        new
-                        {
-                            IngredientId = 6,
-                            TagId = 1
-                        },
-                        new
-                        {
-                            IngredientId = 6,
-                            TagId = 3
-                        },
-                        new
-                        {
-                            IngredientId = 6,
-                            TagId = 8
-                        },
-                        new
-                        {
-                            IngredientId = 7,
-                            TagId = 2
-                        },
-                        new
-                        {
-                            IngredientId = 7,
-                            TagId = 4
-                        },
-                        new
-                        {
-                            IngredientId = 8,
-                            TagId = 4
-                        },
-                        new
-                        {
-                            IngredientId = 8,
-                            TagId = 8
-                        },
-                        new
-                        {
-                            IngredientId = 9,
-                            TagId = 1
-                        },
-                        new
-                        {
-                            IngredientId = 9,
-                            TagId = 6
-                        },
-                        new
-                        {
-                            IngredientId = 10,
-                            TagId = 2
-                        },
-                        new
-                        {
-                            IngredientId = 10,
-                            TagId = 1
-                        },
-                        new
-                        {
-                            IngredientId = 10,
-                            TagId = 7
-                        },
-                        new
-                        {
-                            IngredientId = 11,
-                            TagId = 3
-                        },
-                        new
-                        {
-                            IngredientId = 11,
-                            TagId = 8
-                        },
-                        new
-                        {
-                            IngredientId = 12,
-                            TagId = 3
-                        },
-                        new
-                        {
-                            IngredientId = 12,
-                            TagId = 1
-                        },
-                        new
-                        {
-                            IngredientId = 13,
-                            TagId = 5
-                        },
-                        new
-                        {
-                            IngredientId = 13,
-                            TagId = 8
-                        },
-                        new
-                        {
-                            IngredientId = 14,
-                            TagId = 2
-                        },
-                        new
-                        {
-                            IngredientId = 14,
-                            TagId = 7
-                        });
-                });
-
             modelBuilder.Entity("Vitalis.Data.Models.JournalEntry", b =>
                 {
                     b.Property<int>("Id")
@@ -774,73 +844,6 @@ namespace Vitalis.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Vitalis.Data.Models.MealTag", b =>
-                {
-                    b.Property<int>("MealId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MealId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("MealTags");
-
-                    b.HasData(
-                        new
-                        {
-                            MealId = 1,
-                            TagId = 1
-                        },
-                        new
-                        {
-                            MealId = 1,
-                            TagId = 2
-                        },
-                        new
-                        {
-                            MealId = 1,
-                            TagId = 8
-                        },
-                        new
-                        {
-                            MealId = 2,
-                            TagId = 1
-                        },
-                        new
-                        {
-                            MealId = 2,
-                            TagId = 3
-                        },
-                        new
-                        {
-                            MealId = 2,
-                            TagId = 8
-                        },
-                        new
-                        {
-                            MealId = 3,
-                            TagId = 2
-                        },
-                        new
-                        {
-                            MealId = 3,
-                            TagId = 5
-                        },
-                        new
-                        {
-                            MealId = 4,
-                            TagId = 3
-                        },
-                        new
-                        {
-                            MealId = 4,
-                            TagId = 6
-                        });
-                });
-
             modelBuilder.Entity("Vitalis.Data.Models.NutrientProfile", b =>
                 {
                     b.Property<int>("Id")
@@ -1040,6 +1043,36 @@ namespace Vitalis.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("IngredientTag", b =>
+                {
+                    b.HasOne("Vitalis.Data.Models.Ingredient", null)
+                        .WithMany()
+                        .HasForeignKey("IngredientsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Vitalis.Data.Models.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MealTag", b =>
+                {
+                    b.HasOne("Vitalis.Data.Models.Meal", null)
+                        .WithMany()
+                        .HasForeignKey("MealsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Vitalis.Data.Models.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -1100,25 +1133,6 @@ namespace Vitalis.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("NutrientProfile");
-                });
-
-            modelBuilder.Entity("Vitalis.Data.Models.IngredientTag", b =>
-                {
-                    b.HasOne("Vitalis.Data.Models.Ingredient", "Ingredient")
-                        .WithMany("Tags")
-                        .HasForeignKey("IngredientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Vitalis.Data.Models.Tag", "Tag")
-                        .WithMany("Ingredients")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Ingredient");
-
-                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Vitalis.Data.Models.JournalEntry", b =>
@@ -1189,25 +1203,6 @@ namespace Vitalis.Data.Migrations
                     b.Navigation("Meal");
                 });
 
-            modelBuilder.Entity("Vitalis.Data.Models.MealTag", b =>
-                {
-                    b.HasOne("Vitalis.Data.Models.Meal", "Meal")
-                        .WithMany("Tags")
-                        .HasForeignKey("MealId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Vitalis.Data.Models.Tag", "Tag")
-                        .WithMany("Meals")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Meal");
-
-                    b.Navigation("Tag");
-                });
-
             modelBuilder.Entity("Vitalis.Data.Models.ApplicationUser", b =>
                 {
                     b.Navigation("JournalEntry");
@@ -1216,8 +1211,6 @@ namespace Vitalis.Data.Migrations
             modelBuilder.Entity("Vitalis.Data.Models.Ingredient", b =>
                 {
                     b.Navigation("Meals");
-
-                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("Vitalis.Data.Models.JournalEntry", b =>
@@ -1230,15 +1223,6 @@ namespace Vitalis.Data.Migrations
             modelBuilder.Entity("Vitalis.Data.Models.Meal", b =>
                 {
                     b.Navigation("Ingredients");
-
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("Vitalis.Data.Models.Tag", b =>
-                {
-                    b.Navigation("Ingredients");
-
-                    b.Navigation("Meals");
                 });
 #pragma warning restore 612, 618
         }

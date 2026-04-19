@@ -21,6 +21,7 @@ namespace Vitalis.Data.Repository
                 .AsNoTracking()
                 .Include(i => i.NutrientProfile)
                 .Include(i => i.Tags)
+                .ThenInclude(t => t.Tag)
                 .ToArrayAsync();
         }
 
@@ -30,6 +31,7 @@ namespace Vitalis.Data.Repository
                 .AsNoTracking()
                 .Include(i => i.NutrientProfile)
                 .Include(i => i.Tags)
+                .ThenInclude(t => t.Tag)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 

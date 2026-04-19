@@ -27,6 +27,10 @@ namespace Vitalis.Data.Repository
         {
             return await Context
                 .Tags
+                .Include(t => t.Ingredients)
+                .ThenInclude(ti => ti.Ingredient)
+                .Include(t => t.Meals)
+                .ThenInclude(tm => tm.Meal)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

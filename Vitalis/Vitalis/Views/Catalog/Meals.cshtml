@@ -25,11 +25,11 @@ else
             <div class="col-md-4 " style="aspect-ratio: 4/5; padding:2%">
                 @if (!string.IsNullOrEmpty(meal.ImageUrl))
                 {
-                        <img src="@meal.ImageUrl" asp-append-version="true" class="img-fluid rounded" alt="@meal.Name" style="object-fit : cover; width : 100%; height : 50%">
+                    <img src="@meal.ImageUrl" asp-append-version="true" onerror="this.onerror=null;this.src='/images/default.jpg';"  class="img-fluid rounded" alt="@meal.Name" style="object-fit : cover; width : 100%; height : 50%">
                 }
                 else
                 {
-                        <img src="~/images/default.jpg" asp-append-version="true" class="img-fluid rounded" alt="@meal.Name" style="object-fit : cover; width : 100%; height : 50%">
+                    <img src="~/images/default.jpg" asp-append-version="true" class="img-fluid rounded" alt="@meal.Name" style="object-fit : cover; width : 100%; height : 50%">
                    
                 }
                 <div class="info-border" style="height : 50%; margin-left:3%; margin-right:3%; position:relative">

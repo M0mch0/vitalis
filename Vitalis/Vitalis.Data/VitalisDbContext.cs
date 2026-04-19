@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Vitalis.Data.Configuration;
 using Vitalis.Data.Models;
 
 namespace Vitalis.Data
@@ -19,10 +20,13 @@ namespace Vitalis.Data
         public virtual DbSet<Models.JournalEntry> JournalEntries { get; set; } = null!;
         public virtual DbSet<Models.JournalEntryMeal> JournalEntryMeals { get; set; } = null!;
         public virtual DbSet<Models.JournalEntryIngredient> JournalEntryIngredients { get; set; } = null!;
+        public virtual DbSet<Models.MealTag> MealTags { get; set; } = null!;
+        public virtual DbSet<Models.IngredientTag> IngredientTags { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<ApplicationUser>()
                 .HasOne(u => u.JournalEntry)
                 .WithOne(j => j.User)

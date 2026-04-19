@@ -127,11 +127,11 @@ namespace Vitalis.Services.Core
                 .ToList()
                 .ForEach(t =>
                 {
-                    var tagInput = vm.TagInputs.FirstOrDefault(ti => ti.TagId == t.Id);
+                    var tagInput = vm.TagInputs.FirstOrDefault(ti => ti.TagId == t.TagId);
                     if (tagInput != null)
                     {
-                        tagInput.TagId = t.Id;
-                        tagInput.Name = tagRepository.GetByIdAsync(t.Id).GetAwaiter().GetResult().Name;
+                        tagInput.TagId = t.TagId;
+                        tagInput.Name = tagRepository.GetByIdAsync(t.TagId).GetAwaiter().GetResult().Name;
                         tagInput.Selected = true;
                     }
                 });
@@ -204,7 +204,7 @@ namespace Vitalis.Services.Core
                 .ToList()
                 .ForEach(t =>
                 {
-                    var tagInput = vm.TagInputs.FirstOrDefault(ti => ti.TagId == t.Id);
+                    var tagInput = vm.TagInputs.FirstOrDefault(ti => ti.TagId == t.TagId);
                     if (tagInput != null)
                     {
                         tagInput.Selected = true;
@@ -247,6 +247,11 @@ namespace Vitalis.Services.Core
                             .Where(ti => ti.Selected == true)
                             .Select(ti => ti.TagId)
                             .Any(ti => ti == t.Id))
+                        .Select(t=> new MealTag
+                        {
+                            MealId = vm.Id,
+                            TagId = t.Id
+                        })
                         .ToList(),
                 Ingredients = ingRepository
                         .GetAllIngredientsAsync()
@@ -296,6 +301,11 @@ namespace Vitalis.Services.Core
                             .Where(ti => ti.Selected == true)
                             .Select(ti => ti.TagId)
                             .Any(ti => ti == t.Id))
+                        .Select(t => new IngredientTag
+                        {
+                            TagId = t.Id,
+                            IngredientId = vm.Id,
+                        })
                         .ToList()
             };
 

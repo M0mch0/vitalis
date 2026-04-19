@@ -14,7 +14,7 @@ namespace Vitalis.Data.Models
         public string Name { get; set; } = null!;
 
         public string? ImageUrl { get; set; }
-        public virtual ICollection<Ingredient> Ingredients { get; set; } = new HashSet<Ingredient>();
-        public virtual ICollection<Meal> Meals { get; set; } = new HashSet<Meal>();
+        public virtual ICollection<IngredientTag> Ingredients { get; set; } = new HashSet<IngredientTag>();
+        public virtual ICollection<MealTag> Meals { get; set; } = new HashSet<MealTag>();
     }
 }

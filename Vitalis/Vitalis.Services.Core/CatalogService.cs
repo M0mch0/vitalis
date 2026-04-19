@@ -48,7 +48,7 @@ namespace Vitalis.Services.Core
                     {
                         TagId = t.Id,
                         Name = t.Name,
-                        Selected = m.Tags.Select(tm => tm.Id).Any(tm => tm == t.Id)
+                        Selected = m.Tags.Select(tm => tm.TagId).Any(tm => tm == t.Id)
                     }).ToList()
                 })
                 .ToList();
@@ -68,9 +68,9 @@ namespace Vitalis.Services.Core
                     Name = i.Name,
                     Tags = i.Tags.Select(t => new TagInputViewModel
                     {
-                        TagId = t.Id,
+                        TagId = t.TagId,
                         Selected = true,
-                        Name = t.Name
+                        Name = t.Tag.Name
                     }),
                     NutrientProfile = new NutrientProfileViewModel
                     {
@@ -109,7 +109,9 @@ namespace Vitalis.Services.Core
             {
                 throw new Exception($"Tag with id {id} not found.");
             }
-
+            var a = ingRepository.GetAllIngredientsAsync()
+                    .GetAwaiter()
+                    .GetResult();
             ViewTagViewModel vm = new ViewTagViewModel
             {
                 Id = tag.Id,
@@ -117,7 +119,7 @@ namespace Vitalis.Services.Core
                 Ingredients = ingRepository.GetAllIngredientsAsync()
                     .GetAwaiter()
                     .GetResult()
-                    .Where(i => i.Tags.Contains(tag))
+                    .Where(i => i.Tags.Any(t => t.TagId == tag.Id))
                     .Select(i => new IngredientViewModel
                     {
                         Id = i.Id,
@@ -131,8 +133,8 @@ namespace Vitalis.Services.Core
                         },
                         Tags = i.Tags.Select(t => new TagInputViewModel
                         {
-                            TagId = t.Id,
-                            Name = t.Name,
+                            TagId = t.TagId,
+                            Name = t.Tag.Name,
                             Selected = true
                         })
                     })
@@ -140,7 +142,7 @@ namespace Vitalis.Services.Core
                 Meals =  mealRepository.GetAllMealsAsync()
                     .GetAwaiter()
                     .GetResult()
-                    .Where(m => m.Tags.Contains(tag))
+                    .Where(m => m.Tags.Any(t => t.TagId == tag.Id))
                     .Select(m => new MealViewModel
                     {
                         Id = m.Id,
@@ -162,8 +164,8 @@ namespace Vitalis.Services.Core
                         }).ToList(),
                         Tags = m.Tags.Select(t => new TagInputViewModel
                         {
-                            TagId = t.Id,
-                            Name = t.Name,
+                            TagId = t.TagId,
+                            Name = t.Tag.Name,
                             Selected = true
                         })
 
@@ -203,8 +205,8 @@ namespace Vitalis.Services.Core
                 }).ToList(),
                 Tags = meal.Tags.Select(t => new TagInputViewModel
                 {
-                    TagId = t.Id,
-                    Name = t.Name,
+                    TagId = t.TagId,
+                    Name = t.Tag.Name,
                     Selected = true
                 }).ToList()
             };
@@ -234,8 +236,8 @@ namespace Vitalis.Services.Core
                 },
                 Tags = ing.Tags.Select(t => new TagInputViewModel
                 {
-                    TagId = t.Id,
-                    Name = t.Name,
+                    TagId = t.TagId,
+                    Name = t.Tag.Name,
                     Selected = true
                 }).ToList()
             };
