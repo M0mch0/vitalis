@@ -20,6 +20,7 @@ namespace Vitalis.Controllers
 
         
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Meals()
         {
             IEnumerable<MealViewModel> meals = await catalogService.GetAllMealsAsync();
@@ -28,6 +29,7 @@ namespace Vitalis.Controllers
 
         
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Ingredients()
         {
             IEnumerable<IngredientViewModel> ingredients = await catalogService.GetAllIngredientsAsync();
@@ -36,6 +38,7 @@ namespace Vitalis.Controllers
         }
         
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Tags()
         {
             IEnumerable<TagViewModel> tags = await catalogService.GetAllTagsAsync();
@@ -44,6 +47,7 @@ namespace Vitalis.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ViewMeal(int id)
         {
             MealViewModel meal = await catalogService.GetMealByIdAsync(id);
@@ -51,6 +55,7 @@ namespace Vitalis.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ViewIngredient(int id)
         {
             IngredientViewModel ingredient = await catalogService.GetIngredientByIdAsync(id);
@@ -68,6 +73,7 @@ namespace Vitalis.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> DeleteIngredient(int id, int TagId)
         {
             await catalogService.DeleteIngredientAsync(id);
@@ -78,6 +84,7 @@ namespace Vitalis.Controllers
         
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTag(int id)
         {
             await catalogService.DeleteTagAsync(id);
@@ -86,6 +93,7 @@ namespace Vitalis.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ViewTag(int id)
         {
             ViewTagViewModel tagview = await catalogService.GetViewByTagAsync(id);

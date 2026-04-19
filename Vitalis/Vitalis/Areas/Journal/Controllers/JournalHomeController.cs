@@ -33,6 +33,7 @@ namespace Vitalis.Web.Areas.Journal.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToJournal(JournalEntryViewModel vm)
         {
+
             await journalService.AddToJournalAsync(User.Identity.GetUserId(), vm);
 
             return RedirectToAction("Index");

@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Vitalis.Data;
 using Vitalis.Data.Models;
+using Vitalis.Data.Repository;
+using Vitalis.Data.Repository.Contracts;
 using Vitalis.Data.Seeding;
 using Vitalis.Data.Seeding.Contracts;
 using Vitalis.Services.Core;
@@ -33,8 +35,15 @@ namespace Vitalis
             .AddRoleManager<RoleManager<IdentityRole<Guid>>>()
             .AddEntityFrameworkStores<VitalisDbContext>();
 
+            builder.Services.AddScoped<IMealRepository, MealRepository>();
+            builder.Services.AddScoped<IIngRepository, IngRepository>();
+            builder.Services.AddScoped<ITagRepository, TagRepository>();
+            builder.Services.AddScoped<IJournalRepository, JournalRepository>();
+
+
             builder.Services.AddScoped<ICatalogService, CatalogService>();
             builder.Services.AddScoped<IJournalService, JournalService>();
+            builder.Services.AddScoped<ICreateService, CreateService>();
 
             builder.Services.AddTransient<IIdentitySeeder, IdentitySeeder>();
 

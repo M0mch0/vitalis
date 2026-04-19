@@ -11,11 +11,11 @@ namespace Vitalis.Controllers
 {
     public class CreateController : BaseController
     {
-         private readonly ICatalogService catalogService;
+         private readonly ICreateService createService;
 
-        public CreateController(ICatalogService catalogService)
+        public CreateController(ICreateService createService)
         {
-            this.catalogService = catalogService;
+            this.createService = createService;
         }
 
 
@@ -23,7 +23,7 @@ namespace Vitalis.Controllers
         [Route("Create/Meal")]
         public async Task<IActionResult> Meal()
         {
-            CreateMealViewModel vm = await catalogService.GetCreateMealViewModel();
+            CreateMealViewModel vm = await createService.GetCreateMealViewModel();
             return View(vm);
         }
 
@@ -32,7 +32,7 @@ namespace Vitalis.Controllers
         [Route("Create/Meal/{id}")]
         public async Task<IActionResult> Meal(int id)
         {
-            CreateMealViewModel vm = await catalogService.GetCreateMealViewModel( id );
+            CreateMealViewModel vm = await createService.GetCreateMealViewModel( id );
             return View(vm);
         }
 
@@ -40,7 +40,7 @@ namespace Vitalis.Controllers
         [HttpPost]
         public async Task<IActionResult> Meal(CreateMealViewModel vm)
         {
-            await catalogService.AddMealAsync(vm);
+            await createService.AddMealAsync(vm);
 
             return RedirectToAction("Meals","Catalog");
         }
@@ -51,7 +51,7 @@ namespace Vitalis.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Ingredient()
         {
-            CreateIngredientViewModel vm = await catalogService.GetCreateIngredientViewModel();
+            CreateIngredientViewModel vm = await createService.GetCreateIngredientViewModel();
             return View(vm);
         }
 
@@ -62,7 +62,7 @@ namespace Vitalis.Controllers
         public async Task<IActionResult> Ingredient(int id)
         {
             
-            CreateIngredientViewModel vm = await catalogService.GetCreateIngredientViewModel(id);
+            CreateIngredientViewModel vm = await createService.GetCreateIngredientViewModel(id);
             return View(vm);
         }
 
@@ -71,7 +71,7 @@ namespace Vitalis.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Ingredient(CreateIngredientViewModel vm)
         {
-            await catalogService.AddIngredientAsync(vm);
+            await createService.AddIngredientAsync(vm);
             return RedirectToAction("Ingredients", "Catalog");
         }
 
@@ -81,7 +81,7 @@ namespace Vitalis.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Tag()
         {
-            TagViewModel vm = await catalogService.GetCreateTagViewModel();
+            TagViewModel vm = await createService.GetCreateTagViewModel();
 
             return View(vm);
         }
@@ -92,7 +92,7 @@ namespace Vitalis.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Tag(int id)
         {
-            TagViewModel vm = await catalogService.GetCreateTagViewModel(id);
+            TagViewModel vm = await createService.GetCreateTagViewModel(id);
 
             return View(vm);
         }
@@ -102,7 +102,7 @@ namespace Vitalis.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Tag(TagViewModel tag)
         {
-            await catalogService.AddTagAsync(tag);
+            await createService.AddTagAsync(tag);
 
             return RedirectToAction("Tags", "Catalog");
         }

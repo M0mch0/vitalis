@@ -1,38 +1,41 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using Vitalis.Data;
 using Vitalis.Data.Models;
+using Vitalis.Data.Repository.Contracts;
 using Vitalis.Services.Core.Contracts;
 using Vitalis.Web.ViewModels;
-
 namespace Vitalis.Services.Core
 {
     public class JournalService : IJournalService
     {
-        private readonly VitalisDbContext context;
+        private readonly IMealRepository mealRepository;
+        private readonly IJournalRepository journalRepository;
+        private readonly IIngRepository ingRepository;
 
-        public JournalService(VitalisDbContext context)
+        public JournalService(IMealRepository mealRepository, IJournalRepository journalRepository, IIngRepository ingRepository)
         {
-            this.context = context;
+            this.mealRepository = mealRepository;
+            this.journalRepository = journalRepository;
+            this.ingRepository = ingRepository;
         }
         public async Task<JournalEntryViewModel> GetJournalEntryAsync(string userId)
         {
-            var journal = await context.JournalEntries
-                .Include(j => j.Meals)
-                .ThenInclude(m =>m.Meal)
-                .ThenInclude(mm => mm.Ingredients)
-                .Include(j => j.Ingredients)
-                .FirstAsync(je => je.UserId == Guid.Parse(userId));
-
+            var journal = journalRepository
+                .GetJournalEntryAsync(Guid.Parse(userId))
+                .GetAwaiter()
+                .GetResult();
             var journalIngredientMap = journal.Ingredients
                 .ToDictionary(ji => ji.IngredientId, ji => ji.Quantity);
 
-            var ingredients = await context.Ingredients
-                .Include(i => i.NutrientProfile)
+            var ingredients = ingRepository.GetAllIngredientsAsync().GetAwaiter().GetResult()
                 .Select(i => new
                 {
                     i.Id,
@@ -41,46 +44,57 @@ namespace Vitalis.Services.Core
                     Protein = i.NutrientProfile.Protein,
                     Fats = i.NutrientProfile.Fat
                 })
-                .ToListAsync();
+                .ToList();
 
             JournalEntryViewModel journalvm = new JournalEntryViewModel
             {
                 UserId = userId,
-                Meals = context.Meals.Select(m => new MealInputViewModel
-                {
-                    Id = m.Id,
-                    Name = m.Name,
-                    Selected = journal.Meals.Select(tm => tm.MealId).Any(tm => tm == m.Id),
-                    Ingredients = context.Ingredients.Select(i=> new JournalIngredientViewModel
+                Meals = mealRepository
+                    .GetAllMealsAsync()
+                    .GetAwaiter()
+                    .GetResult()
+                    .Select(m => new MealInputViewModel
                     {
-                        IngredientId = i.Id,
-                        Carbs = i.NutrientProfile.Carbohydrates,
-                        Protein = i.NutrientProfile.Protein,
-                        Fats = i.NutrientProfile.Fat,
-                        IngredientName = i.Name,
-                        Quantity = 0,
-                        Selected = false
+                        Id = m.Id,
+                        Name = m.Name,
+                        Selected = journal
+                            .Meals
+                            .Select(tm => tm.MealId)
+                            .Any(tm => tm == m.Id),
+                        Ingredients = ingRepository
+                            .GetAllIngredientsAsync()
+                            .GetAwaiter()
+                            .GetResult()
+                            .Select(i=> new JournalIngredientViewModel
+                            {
+                                IngredientId = i.Id,
+                                Carbs = i.NutrientProfile.Carbohydrates,
+                                Protein = i.NutrientProfile.Protein,
+                                Fats = i.NutrientProfile.Fat,
+                                IngredientName = i.Name,
+                                Quantity = 0,
+                                Selected = false
+                            }).ToList(),
+                        Amount = 0
                     }).ToList(),
-                    Amount = 0
-                }).ToList(),
-                Ingredients = ingredients.Select(i => new JournalIngredientViewModel
-                {
-                    IngredientId = i.Id,
-                    IngredientName = i.Name,
-                    Quantity = journalIngredientMap.TryGetValue(i.Id, out double q) ? q : 0,
-                    Selected = journal.Ingredients.Select(tm => tm.IngredientId).Any(tm => tm == i.Id),
-                    Carbs = i.Carbs,
-                    Protein = i.Protein, 
-                    Fats = i.Fats
-                }).ToList()
+                    Ingredients = ingredients
+                        .Select(i => new JournalIngredientViewModel
+                        {
+                             IngredientId = i.Id,
+                             IngredientName = i.Name,
+                             Quantity = journalIngredientMap.TryGetValue(i.Id, out double q) ? q : 0,
+                             Selected = journal.Ingredients.Select(tm => tm.IngredientId).Any(tm => tm == i.Id),
+                             Carbs = i.Carbs,
+                             Protein = i.Protein, 
+                             Fats = i.Fats
+                         }).ToList()
             };
             if (journal.Meals is not null)
             {
                 foreach (MealInputViewModel meal in journalvm.Meals)
                 {
-                    // Find the matching JournalEntryMeal for this meal (if any)
                     var jm = journal.Meals.FirstOrDefault(m => m.MealId == meal.Id);
-                    if (jm == null) continue; // not in the journal -> skip
+                    if (jm == null) continue;
 
                     ICollection<MealIngredient>? mi = jm.Meal?.Ingredients;
                     if (meal.Ingredients is null) continue;
@@ -105,70 +119,51 @@ namespace Vitalis.Services.Core
             return journalvm;
         }
 
-        public async Task AddToJournalAsync(string userId, JournalEntryViewModel input)
+        public async Task AddToJournalAsync(string userId, JournalEntryViewModel vm)
         {
-              var journal = await context.JournalEntries
-                .Include(j => j.Meals)
-                .Include(j => j.Ingredients)
-                .FirstAsync(je => je.UserId == Guid.Parse(userId));
-            if(input.Meals is not null)
+            var journalEntry = await journalRepository.GetJournalEntryAsync(Guid.Parse(userId));
+            if (journalEntry == null) return;
+
+            if(vm.Meals is not null)
             {
-                foreach (var meal in input.Meals.Where(m => m.Selected))
+                foreach (var meal in vm.Meals.Where(m => m.Selected))
                 {
-                    var mealEntity = await context.Meals.FindAsync(meal.Id);
-    
+                    var mealEntity = mealRepository.GetByIdAsync(meal.Id).GetAwaiter().GetResult();
                     if (mealEntity == null) continue;
                     var jem = new JournalEntryMeal
-                                 {
-                                     MealId = meal.Id,
-                                     JournalEntryId = journal.Id,
-                                     JournalEntry = journal,
-                                     Meal = mealEntity,
-                                     Amount = 1
-                                  };
-    
-                    journal.Meals.Add(jem);
-                    context.JournalEntryMeals.Add(jem); 
-                    
-                    
-                }
-            }
-            if (input.Ingredients is not null)
-            {
-                foreach (var ingredient in input.Ingredients.Where(i => i.Selected))
-                {
-                    var ingEntity = await context.Ingredients.FindAsync(ingredient.IngredientId);
-                    if (ingEntity == null) continue;
-                    var jei = new JournalEntryIngredient
-                    {
-                        IngredientId = ingredient.IngredientId,
-                        JournalEntryId = journal.Id,
-                        JournalEntry = journal,
-                        Ingredient = ingEntity,
-                        Quantity = ingredient.Quantity
+                    { 
+                        MealId = meal.Id,
+                        JournalEntryId = journalEntry.Id,
+                        JournalEntry = journalEntry,
+                        Meal = mealEntity,
+                        Amount = 1
                     };
+    
+                    await journalRepository.AddJournalEntryMealAsync(jem);
 
-                    journal.Ingredients.Add(jei);
-                    context.JournalEntryIngredients.Add(jei);
                 }
             }
-            await context.SaveChangesAsync();
-            return;
+            if (vm.Ingredients is not null)
+            {
+                foreach (var ingredient in vm.Ingredients.Where(i => i.Selected))
+                {
+                    var ingEntity = ingRepository.GetByIdAsync(ingredient.IngredientId).GetAwaiter().GetResult();
+                    if (ingEntity == null) continue;
+                    
+                    await journalRepository.AddJournalEntryIngredientAsync(journalEntry, ingEntity.Id);
+                }
+            }
         }
 
         public async Task RemoveFromJournalAsync(string userId, int id, bool MealOrIng)
         {
-            var journal = await context.JournalEntries
-                .Include(j => j.Meals)
-                .Include(j => j.Ingredients)
-                .FirstAsync(je => je.UserId == Guid.Parse(userId));
+            var journal = journalRepository.GetJournalEntryAsync(Guid.Parse(userId)).GetAwaiter().GetResult();
             if (MealOrIng)
             {
                 var mealToRemove = journal.Meals.FirstOrDefault(m => m.MealId == id);
                 if (mealToRemove != null)
                 {
-                    journal.Meals.Remove(mealToRemove);
-                    context.JournalEntryMeals.Remove(mealToRemove);
+                    await journalRepository.DeleteJournalEntryMealAsync(mealToRemove);
                 }
             }
             else
@@ -176,39 +171,29 @@ namespace Vitalis.Services.Core
                 var ingToRemove = journal.Ingredients.FirstOrDefault(i => i.IngredientId == id);
                 if (ingToRemove != null)
                 {
-                    journal.Ingredients.Remove(ingToRemove);
-                    context.JournalEntryIngredients.Remove(ingToRemove);
+                    await journalRepository.DeleteJournalEntryIngredientAsync(ingToRemove);
                 }
              }
-            await context.SaveChangesAsync();
-             return;
         }
 
         public async Task UpdateQuantityAsync(string userId, int id, double quantity)
         {
-            var journal = await context.JournalEntries
-                .Include(j => j.Ingredients)
-                .FirstAsync(je => je.UserId == Guid.Parse(userId));
+            var journal = journalRepository.GetJournalEntryAsync(Guid.Parse(userId)).GetAwaiter().GetResult();
             var ingredientToUpdate = journal.Ingredients.FirstOrDefault(i => i.IngredientId == id);
             if (ingredientToUpdate != null)
             {
                 ingredientToUpdate.Quantity = quantity;
-                context.JournalEntryIngredients.Update(ingredientToUpdate);
-                await context.SaveChangesAsync();
+                await journalRepository.UpdateIngredientQuantityAsync(ingredientToUpdate);
             }
-             return;
         }
         public async Task UpdateAmountAsync(string userId, int id, int amount)
         {
-            var journal = await context.JournalEntries
-                .Include(j => j.Meals)
-                .FirstAsync(je => je.UserId == Guid.Parse(userId));
+            var journal = journalRepository.GetJournalEntryAsync(Guid.Parse(userId)).GetAwaiter().GetResult();
             var mealToUpdate = journal.Meals.FirstOrDefault(i => i.MealId == id);
             if (mealToUpdate != null)
             {
                 mealToUpdate.Amount = amount;
-                context.JournalEntryMeals.Update(mealToUpdate);
-                await context.SaveChangesAsync();
+                await journalRepository.UpdateMealAmountAsync(mealToUpdate);
             }
             return;
         }

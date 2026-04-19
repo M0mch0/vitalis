@@ -92,8 +92,7 @@
             <thead>
                 <tr>
                     <th style="width:200px">Name</th>
-                    <th style="width:120px">Quantity (g)</th>
-                    <th></th>
+                    <th style="width:200px">Quantity (g)</th>   
                     <th class="text-end">Carbs</th>
                     <th class="text-end">Protein</th>
                     <th class="text-end">Fats</th>
@@ -111,12 +110,13 @@
                     {
                         <tr data-ingredient-id="@ing.IngredientId">
                             <td>@ing.IngredientName</td>
-                            <td class="text-end"><input form="@ing.IngredientId" type="number" min="0" step="0.1" name="quantity" class="form-control form-control-sm ing-qty" value="@ing.Quantity" /></td>
-                            <td class=" ing-fats" style="text-align:left">
-                                <form asp-area="Journal" asp-controller="JournalHome" asp-action="UpdateQuantity" method="post" id="@ing.IngredientId" class="d-inline" style="text-align:left">
+                            @Html.AntiForgeryToken()
+                            <td style="text-align:left">
+                                <form asp-area="Journal" asp-controller="JournalHome" asp-action="UpdateQuantity" method="post" id="ing.IngredientId+1" class="d-inline d-flex" style="text-align:left">
                                     @Html.AntiForgeryToken()
+                                    <input type="number" min="0" step="0.1" name="quantity" class="form-control flex-fill mx-1 form-control-sm ing-qty" style="width:30%" value="@ing.Quantity" />
                                     <input type="hidden" name="id" value="@ing.IngredientId" />
-                                    <button type="submit" class="btn btn-sm btn-primary save-qty-btn invisible">Save</button>
+                                    <button type="submit" class="btn flex-fill mx-1 btn-sm btn-primary save-qty-btn invisible">Save</button>
                                 </form>
                             </td>
                             <td class="text-end ing-carbs">@(ing.Carbs * ing.Quantity / 100)</td>
@@ -143,9 +143,9 @@
     <div class="col-12 mt-4">
         <h4 class="body-text">Daily totals</h4>
         <div class="d-flex gap-3">
-            <div class="p-3 border rounded body-text" style="text-align:center">Carbs: <strong id="daily-carbs">@TotalCarbs</strong></div>
-            <div class="p-3 border rounded body-text" style="text-align:center">Protein: <strong id="daily-protein">@TotalProtein</strong></div>
-            <div class="p-3 border rounded body-text" style="text-align:center">Fats: <strong id="daily-fats">@TotalFats</strong></div>
+            <div class="p-3 border rounded body-text" style="text-align:center">Carbs: <strong id="daily-carbs">@TotalCarbs.ToString("F1")</strong></div>
+            <div class="p-3 border rounded body-text" style="text-align:center">Protein: <strong id="daily-protein">@TotalProtein.ToString("F1")</strong></div>
+            <div class="p-3 border rounded body-text" style="text-align:center">Fats: <strong id="daily-fats">@TotalFats.ToString("F1")</strong></div>
         </div>
     </div>
 </div>

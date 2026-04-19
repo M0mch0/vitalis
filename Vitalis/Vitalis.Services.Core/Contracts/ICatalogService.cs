@@ -19,27 +19,7 @@ namespace Vitalis.Services.Core.Contracts
 
         Task<MealViewModel> GetMealByIdAsync(int id);
 
-        //----------------------------------------------//
-
-        Task<CreateMealViewModel> GetCreateMealViewModel();
-
-        Task<CreateMealViewModel> GetCreateMealViewModel(int id);
-
-        Task<CreateIngredientViewModel> GetCreateIngredientViewModel();
-
-        Task<CreateIngredientViewModel> GetCreateIngredientViewModel(int id);
-
-        Task<TagViewModel> GetCreateTagViewModel();
-
-        Task<TagViewModel> GetCreateTagViewModel(int id);
-
-        //----------------------------------------------//
-
-        Task AddMealAsync(CreateMealViewModel vm);
-
-        Task AddIngredientAsync(CreateIngredientViewModel vm);
-
-        Task AddTagAsync(TagViewModel vm);
+        //----------------------------------------------
 
         Task DeleteMealAsync(int id);
 
