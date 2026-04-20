@@ -46,6 +46,7 @@ namespace Vitalis.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Meal(CreateMealViewModel vm)
         {
             await createService.AddMealAsync(vm);
@@ -84,6 +85,7 @@ namespace Vitalis.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Ingredient(CreateIngredientViewModel vm)
         {
             await createService.AddIngredientAsync(vm);
@@ -122,6 +124,7 @@ namespace Vitalis.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Tag(TagViewModel tag)
         {
             if (tag == null)

@@ -62,6 +62,7 @@ else
                                 Edit
                             </a>
                             <form asp-controller="Catalog" asp-action="DeleteTag" method="post" class="flex-fill mx-1 d-flex">
+                                    @Html.AntiForgeryToken()
                                 <input value="@meal.Id" type="hidden" name="id" />
                                 <button type="submit" class="btn btn-delete w-100">Delete</button>
                             </form>

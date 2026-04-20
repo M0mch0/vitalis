@@ -21,6 +21,7 @@ else
     </div>
     <div class="row g-3">
         <form asp-action="Meals" method="get" class="mb-4" style="padding:1rem">
+            @Html.AntiForgeryToken()
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search meals..." name="searchQuery" value="@ViewData["SearchQuery"]" />
                 <button class="btn btn-outline-secondary" type="submit">Search</button>
@@ -78,6 +79,7 @@ else
                                 Edit
                             </a>
                             <form asp-controller="Catalog" asp-action="DeleteMeal" method="post" class="flex-fill mx-1 d-flex">
+                                    @Html.AntiForgeryToken()
                                 <input value="@meal.Id" type="hidden" name="id" />
                                 <button type="submit" class="btn btn-delete w-100">Delete</button>
                             </form>

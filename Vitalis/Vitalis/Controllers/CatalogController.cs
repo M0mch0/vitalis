@@ -88,6 +88,8 @@ namespace Vitalis.Controllers
         }
 
         [HttpPost]
+
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteMeal(int id, int TagId)
         {
             if (id <= 0)
@@ -102,6 +104,7 @@ namespace Vitalis.Controllers
 
         [HttpPost]
         [Authorize(Roles ="Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteIngredient(int id, int TagId)
         {
             if (id <= 0)
@@ -117,6 +120,7 @@ namespace Vitalis.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteTag(int id)
         {
             if (id <= 0)

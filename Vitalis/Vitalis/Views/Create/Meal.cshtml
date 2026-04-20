@@ -15,6 +15,7 @@ else
 }
 
 <form asp-action="Meal" method="post" class="row g-3" style="justify-content:center">
+    @Html.AntiForgeryToken()
         <input asp-for="Id" type="hidden" /> 
     <div class="col-12 col-md-3">
         <input asp-for="Name" class="form-control" placeholder="Name" />

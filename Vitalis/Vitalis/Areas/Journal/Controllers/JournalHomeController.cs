@@ -31,6 +31,7 @@ namespace Vitalis.Web.Areas.Journal.Controllers
             return View(vm);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToJournal(JournalEntryViewModel vm)
         {
 

@@ -23,6 +23,7 @@ else{
 
 
 <form asp-action="Ingredient" method="post" class="row g-3" style="justify-content:center">
+    @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="NutrientProfile.Id" />    
     <div class="col-12 col-md-3">

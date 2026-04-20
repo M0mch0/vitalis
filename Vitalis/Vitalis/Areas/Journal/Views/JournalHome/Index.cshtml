@@ -175,15 +175,29 @@
                 <tr><th></th><th>Name</th></tr>
               </thead>
               <tbody>
+                @{
+                    var meals = Model.Meals.Where(m => m.Selected).ToList();
+                }
+
                 @for (int i =0; i<Model.Meals.Count(); i++)
                 {
-                    if (Model.Meals[i].Selected == true) continue;
+                    if (!Model.Meals[i].Selected)
+                    {
                     <tr>
-                    <input asp-for="@Model.Meals[i].Id" type="hidden" />
-                    <input asp-for="@Model.Meals[i].Name" type="hidden" />
-                    <td><input asp-for="@Model.Meals[i].Selected" type="checkbox" class="avail-meal" data-id="@Model.Meals[i].Id" data-name="@Model.Meals[i].Name" /></td>
-                    <td>@Model.Meals[i].Name</td>
+                        <td>
+                            <input asp-for="@Model.Meals[i].Id" type="hidden" />
+                            <input asp-for="@Model.Meals[i].Name" type="hidden" value="@Model.Meals[i].Name" />
+                            <input asp-for="@Model.Meals[i].Selected" type="checkbox" class="avail-meal" data-id="@Model.Meals[i].Id" data-name="@Model.Meals[i].Name" />
+                        </td>
+                        <td>@Model.Meals[i].Name</td>
                     </tr>
+                    }
+                    else
+                    {
+                        <input asp-for="@Model.Meals[i].Id" type="hidden" />
+                        <input asp-for="@Model.Meals[i].Name" type="hidden" value="@Model.Meals[i].Name" /> 
+                        <input asp-for="@Model.Meals[i].Selected" type="hidden" value="@true" />
+                    }
                 }
               </tbody>
             </table>
@@ -200,14 +214,13 @@
                 {
                     <input  asp-for="@Model.Ingredients[i].IngredientId" type="hidden" />
                     <input asp-for="@Model.Ingredients[i].IngredientName" type="hidden" />
+                    @Html.AntiForgeryToken()
                     if (ingredients[i].Selected == true){
-                        Model.Ingredients[i].Selected = false;
-                        Model.Ingredients[i].Quantity = 0;
                         continue;}
                     <tr>
                         <td><input asp-for="@Model.Ingredients[i].Selected" type="checkbox" class="avail-ing" data-id="@Model.Ingredients[i].IngredientId" data-name="@Model.Ingredients[i].IngredientName" /></td>
                         <td>@Model.Ingredients[i].IngredientName</td>
-                                            <td><input type="number" class="form-control form-control-sm avail-ing-qty" value="100" data-id="@Model.Ingredients[i].Quantity" data-name="@Model.Ingredients[i].Quantity" /></td>
+                        <td><input type="number" class="form-control form-control-sm avail-ing-qty" value="100" data-id="@Model.Ingredients[i].Quantity" data-name="@Model.Ingredients[i].Quantity" /></td>
                     </tr>
                 }
               </tbody>

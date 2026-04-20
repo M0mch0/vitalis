@@ -15,6 +15,7 @@ else
     <h1 class="body-header" style="text-align: center">Create Tag</h1>
 }
 <form asp-action="Tag" method="post" class="row g-3">
+    @Html.AntiForgeryToken()
     <div class="col-12 col-md-3">
         <input asp-for="@Model.Id" method="post" class="form-control" type="hidden"/>
         <input asp-for="@Model.Name" class="form-control" placeholder="Name" value="@Model.Name"/>
