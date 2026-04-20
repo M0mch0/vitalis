@@ -18,7 +18,7 @@ namespace Vitalis.Services.Core
             this.tagRepository = tagRepository;
             this.ingRepository = ingRepository;
         }
-        public async Task<IEnumerable<MealViewModel>> GetAllMealsAsync(string? searchQuery = null)
+        public async Task<(IEnumerable<MealViewModel> Meals, int TotalPages)> GetAllMealsAsync(string? searchQuery = null, int pageNumber = 1, int pageSize = 9)
         {
             IQueryable<Meal> meals = mealRepository
                 .GetAllMealsAsync()
@@ -26,7 +26,7 @@ namespace Vitalis.Services.Core
                 .GetResult()
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchQuery))
+            if (!string.IsNullOrWhiteSpace(searchQuery))
             {
                 searchQuery = searchQuery.ToLower().Trim();
                 meals = meals.Where(m => m.Ingredients.Any(mi => mi.Ingredient.Name.ToLower().Contains(searchQuery)) ||
@@ -34,7 +34,14 @@ namespace Vitalis.Services.Core
                                                 m.Name.ToLower().Contains(searchQuery));
             }
             
-            return meals
+            int totalMeals = meals.Count();
+            int totalPages = (int)Math.Ceiling(totalMeals / (double)pageSize);
+
+            meals = meals
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize);
+
+            return (meals   
                 .OrderBy(a => a.Name)
                 .Select(m => new MealViewModel
                 {
@@ -62,10 +69,10 @@ namespace Vitalis.Services.Core
                         Selected = m.Tags.Select(tm => tm.TagId).Any(tm => tm == t.Id)
                     }).ToList()
                 })
-                .ToList();
+                .ToList(), totalPages)  ;
                 
         }
-        public async Task<IEnumerable<IngredientViewModel>> GetAllIngredientsAsync(string? searchQuery = null)
+        public async Task<(IEnumerable<IngredientViewModel> Ingredients, int TotalPages)> GetAllIngredientsAsync(string? searchQuery = null, int pageNumber = 1, int pageSize = 9)
         {
             IQueryable<Ingredient> ingredients = ingRepository
                 .GetAllIngredientsAsync()
@@ -77,10 +84,17 @@ namespace Vitalis.Services.Core
             {
                 searchQuery = searchQuery.ToLower().Trim();
                 ingredients = ingredients.Where(m => m.Tags.Any(t => t.Tag.Name.ToLower().Contains(searchQuery)) ||
-                                                     m.Name.ToLower().Contains(searchQuery));
+                                                     m.Name.ToLower().Contains(searchQuery)).AsQueryable();
             }
 
-            return ingredients
+            int totalIngredients = ingredients.Count();
+            int TotalPages = (int)Math.Ceiling(totalIngredients / (double)pageSize);
+
+            ingredients = ingredients
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize);
+
+            return (ingredients
                 .OrderBy(a => a.Name)
                 .Select(i => new IngredientViewModel
                 {
@@ -100,7 +114,7 @@ namespace Vitalis.Services.Core
                         Protein = i.NutrientProfile.Protein
                     }
                 })
-                .ToList(); ;
+                .ToList(), TotalPages);
                 
         }
         public async Task<IEnumerable<TagViewModel>> GetAllTagsAsync()
@@ -125,8 +139,8 @@ namespace Vitalis.Services.Core
             Tag? tag = await tagRepository.GetByIdAsync(id);
 
             if(tag is null)
-            {
-                throw new Exception($"Tag with id {id} not found.");
+            { 
+                return null;
             }
             var a = ingRepository.GetAllIngredientsAsync()
                     .GetAwaiter()
@@ -200,7 +214,7 @@ namespace Vitalis.Services.Core
 
             if (meal is null)
             {
-                throw new Exception($"Meal with id {id} not found.");
+                return null;
             }
 
             MealViewModel vm = new MealViewModel
@@ -239,7 +253,7 @@ namespace Vitalis.Services.Core
 
             if (ing is null)
             {
-                throw new Exception($"Ingredient with id {id} not found.");
+                return null;
             }
             IngredientViewModel vm = new IngredientViewModel
             {

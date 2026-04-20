@@ -79,5 +79,22 @@ else
 
             </div>
         }
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination">
+                @if ((int)ViewData["CurrentPage"] > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Ingredients" asp-route-pageNumber="@( (int)ViewData["CurrentPage"] - 1 )" asp-route-searchQuery="@ViewData["SearchQuery"]">Previous</a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= (int)ViewData["TotalPages"]; i++)
+                {
+                    <li class="page-item @(i == (int)ViewData["CurrentPage"] ? "active" : "")">
+                        <a class="page-link" asp-action="Ingredients" asp-route-pageNumber="@i" asp-route-searchQuery="@ViewData["SearchQuery"]">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
     </div>
 }

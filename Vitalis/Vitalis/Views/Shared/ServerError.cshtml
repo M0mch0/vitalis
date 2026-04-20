@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Server Error";
+}
+
+<div class="error-container">
+    <h1>500</h1>
+    <h2>Something went wrong</h2>
+
+    <p>
+        An unexpected error occurred on the server. Please try again later.
+    </p>
+
+    <a asp-controller="Home" asp-action="Index" class="btn-home">
+        Go Back Home
+    </a>
+</div>
+
+
+<style>
+    .notfound-container {
+        height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+        .notfound-container h1 {
+            font-size: 6rem;
+            margin-bottom: 0.5rem;
+            color: #dc3545;
+        }
+
+        .notfound-container h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .notfound-container p {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+        }
+
+    .btn-home {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+        .btn-home:hover {
+            background-color: #0056b3;
+        }
+</style>

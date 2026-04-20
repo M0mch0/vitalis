@@ -9,6 +9,9 @@
   <Folder Name="/Solution Items/">
     <File Path="Readme.md" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Vitalis.Services.Tests/Vitalis.Services.Tests.csproj" Id="585cf6cf-46c9-4f0c-9bd4-4a4d04707c37" />
+  </Folder>
   <Folder Name="/Web/">
     <Project Path="Vitalis.Web.Infrastructure1/Vitalis.Web.Infrastructure.csproj" Id="54ab05bd-7343-42d5-ba5a-b287ca039039" />
     <Project Path="Vitalis.Web.ViewModels/Vitalis.Web.ViewModels.csproj" Id="b096a899-efb8-4977-97a7-ac0e5286b3c7" />

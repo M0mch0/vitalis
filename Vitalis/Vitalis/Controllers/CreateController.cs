@@ -32,7 +32,15 @@ namespace Vitalis.Controllers
         [Route("Create/Meal/{id}")]
         public async Task<IActionResult> Meal(int id)
         {
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
             CreateMealViewModel vm = await createService.GetCreateMealViewModel( id );
+            if(vm == null)
+            {
+                return NotFound();
+            }
             return View(vm);
         }
 
@@ -61,8 +69,15 @@ namespace Vitalis.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Ingredient(int id)
         {
-            
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
             CreateIngredientViewModel vm = await createService.GetCreateIngredientViewModel(id);
+            if (vm == null)
+            {
+                return NotFound();
+            }
             return View(vm);
         }
 
@@ -92,8 +107,15 @@ namespace Vitalis.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Tag(int id)
         {
+            if(id <= 0)
+            {
+                return BadRequest();
+            }
             TagViewModel vm = await createService.GetCreateTagViewModel(id);
-
+            if (vm == null)
+            {
+                return NotFound();
+            }
             return View(vm);
         }
 
@@ -102,6 +124,11 @@ namespace Vitalis.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Tag(TagViewModel tag)
         {
+            if (tag == null)
+            {
+                return BadRequest();
+            }
+
             await createService.AddTagAsync(tag);
 
             return RedirectToAction("Tags", "Catalog");

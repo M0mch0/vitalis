@@ -68,23 +68,43 @@ else
                         }
                     </div>
                     <div style="text-align:center; width :  100%; position:absolute; bottom:0; padding: 1rem">
-                        <form asp-controller="Catalog" asp-action="DeleteMeal" method="post">
-                            <a class="btn btn-view  col-md-3" asp-controller="Catalog" asp-action="ViewMeal" asp-route-id="@meal.Id">
-                                View
-                            </a>
-                            <a class="btn btn-edit col-md-3" asp-controller="Create" asp-action="Meal" asp-route-id="@meal.Id">
+                        <div class="d-flex gap-2 justify-content-between">
+                        <a class="btn btn-view flex-fill mx-1 text-center" asp-controller="Catalog" asp-action="ViewIngredient" asp-route-id="@meal.Id">
+                            View
+                        </a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="btn btn-edit flex-fill mx-1 text-center" asp-controller="Create" asp-action="Meal" asp-route-id="@meal.Id">
                                 Edit
                             </a>
-
-                            <input value="@meal.Id" type="hidden" name="id" />
-                            <input value="Meals" type="hidden" name="PrevAction" />
-                            <button type="submit" class="btn btn-delete col-md-3">Delete</button>
-                        </form>
+                            <form asp-controller="Catalog" asp-action="DeleteMeal" method="post" class="flex-fill mx-1 d-flex">
+                                <input value="@meal.Id" type="hidden" name="id" />
+                                <button type="submit" class="btn btn-delete w-100">Delete</button>
+                            </form>
+                        }
+                    </div>
                     </div>
                 </div>
                 
 
             </div>
         }
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination">
+                @if((int)ViewData["CurrentPage"] > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Meals" asp-route-pageNumber="@( (int)ViewData["CurrentPage"] - 1 )" asp-route-searchQuery="@ViewData["SearchQuery"]">Previous</a>
+                    </li>
+                }
+
+                @for(int i = 1; i <= (int)ViewData["TotalPages"]; i++)
+                {
+                    <li class="page-item @(i == (int)ViewData["CurrentPage"] ? "active" : "")">
+                        <a class="page-link" asp-action="Meals" asp-route-pageNumber="@i" asp-route-searchQuery="@ViewData["SearchQuery"]">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
     </div>
 }

@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Bad Request";
+}
+
+<div class="error-container">
+    <h1>400</h1>
+    <h2>Bad Request</h2>
+
+    <p>
+        Your request could not be understood. Please check your input and try again.
+    </p>
+
+    <a asp-controller="Home" asp-action="Index" class="btn-home">
+        Go Back Home
+    </a>
+</div>
+
+<style>
+    .error-container {
+        height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+        .error-container h1 {
+            font-size: 6rem;
+            margin-bottom: 0.5rem;
+            color: #dc3545;
+        }
+
+        .error-container h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-container p {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+        }
+
+    .btn-home {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+        .btn-home:hover {
+            background-color: #0056b3;
+        }
+</style>

@@ -70,7 +70,7 @@ namespace Vitalis.Services.Core
 
             if (meal is null)
             {
-                throw new Exception($"Meal with id {id} not found.");
+                return null;
             }
             CreateMealViewModel vm = new CreateMealViewModel
             {
@@ -141,6 +141,7 @@ namespace Vitalis.Services.Core
         }
         public async Task<CreateIngredientViewModel> GetCreateIngredientViewModel()
         {
+            
             CreateIngredientViewModel vm = new CreateIngredientViewModel
             {
                 NutrientProfile = new NutrientProfileViewModel
@@ -173,7 +174,7 @@ namespace Vitalis.Services.Core
 
             if (ing is null)
             {
-                throw new Exception($"Ingredient with id {id} not found.");
+                return null;
             }
             CreateIngredientViewModel vm = new CreateIngredientViewModel
             {
@@ -221,6 +222,8 @@ namespace Vitalis.Services.Core
             Tag t = tagRepository.GetByIdAsync(id)
                     .GetAwaiter()
                     .GetResult();
+
+            if (t is null) return null;
 
             TagViewModel vm = new TagViewModel
             {

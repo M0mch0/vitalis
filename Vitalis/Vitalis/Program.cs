@@ -75,6 +75,7 @@ namespace Vitalis
             app.UseRolesSeeder();
             app.UseAdminUserSeeder();
 
+            app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
 
             app.MapControllerRoute(
                 name: "areas",

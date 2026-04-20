@@ -7,9 +7,9 @@ namespace Vitalis.Services.Core.Contracts
 {
     public interface ICatalogService
     {
-        Task<IEnumerable<MealViewModel>> GetAllMealsAsync(string? searchQuery = null);
+        Task<(IEnumerable<MealViewModel> Meals, int TotalPages)> GetAllMealsAsync(string? searchQuery = null, int pageNumber = 1, int pageSize = 9);
 
-        Task<IEnumerable<IngredientViewModel>> GetAllIngredientsAsync(string? searchQuery = null);
+        Task<(IEnumerable<IngredientViewModel> Ingredients, int TotalPages)> GetAllIngredientsAsync(string? searchQuery = null, int pageNumber = 1, int pageSize = 9);
 
         Task<IEnumerable<TagViewModel>> GetAllTagsAsync();
 
