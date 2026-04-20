@@ -18,11 +18,22 @@ namespace Vitalis.Services.Core
             this.tagRepository = tagRepository;
             this.ingRepository = ingRepository;
         }
-        public async Task<IEnumerable<MealViewModel>> GetAllMealsAsync()
+        public async Task<IEnumerable<MealViewModel>> GetAllMealsAsync(string? searchQuery = null)
         {
-            IEnumerable<Meal> meals = mealRepository.GetAllMealsAsync().GetAwaiter().GetResult();
-                
+            IQueryable<Meal> meals = mealRepository
+                .GetAllMealsAsync()
+                .GetAwaiter()
+                .GetResult()
+                .AsQueryable();
 
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                searchQuery = searchQuery.ToLower().Trim();
+                meals = meals.Where(m => m.Ingredients.Any(mi => mi.Ingredient.Name.ToLower().Contains(searchQuery)) ||
+                                                m.Tags.Any(t => t.Tag.Name.ToLower().Contains(searchQuery)) ||
+                                                m.Name.ToLower().Contains(searchQuery));
+            }
+            
             return meals
                 .OrderBy(a => a.Name)
                 .Select(m => new MealViewModel
@@ -54,12 +65,22 @@ namespace Vitalis.Services.Core
                 .ToList();
                 
         }
-        public async Task<IEnumerable<IngredientViewModel>> GetAllIngredientsAsync()
+        public async Task<IEnumerable<IngredientViewModel>> GetAllIngredientsAsync(string? searchQuery = null)
         {
-            IEnumerable<IngredientViewModel> ingredients = ingRepository
+            IQueryable<Ingredient> ingredients = ingRepository
                 .GetAllIngredientsAsync()
                 .GetAwaiter()
                 .GetResult()
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                searchQuery = searchQuery.ToLower().Trim();
+                ingredients = ingredients.Where(m => m.Tags.Any(t => t.Tag.Name.ToLower().Contains(searchQuery)) ||
+                                                     m.Name.ToLower().Contains(searchQuery));
+            }
+
+            return ingredients
                 .OrderBy(a => a.Name)
                 .Select(i => new IngredientViewModel
                 {
@@ -79,9 +100,7 @@ namespace Vitalis.Services.Core
                         Protein = i.NutrientProfile.Protein
                     }
                 })
-                .ToList();
-
-            return ingredients;
+                .ToList(); ;
                 
         }
         public async Task<IEnumerable<TagViewModel>> GetAllTagsAsync()

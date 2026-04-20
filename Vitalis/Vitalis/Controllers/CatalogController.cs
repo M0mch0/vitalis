@@ -21,18 +21,22 @@ namespace Vitalis.Controllers
         
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Meals()
+        public async Task<IActionResult> Meals(string? searchQuery = null)
         {
-            IEnumerable<MealViewModel> meals = await catalogService.GetAllMealsAsync();
+            IEnumerable<MealViewModel> meals = await catalogService.GetAllMealsAsync(searchQuery);
+
+            ViewData["SearchQuery"] = searchQuery;
             return View(meals);
         }
 
         
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Ingredients()
+        public async Task<IActionResult> Ingredients(string? searchQuery = null)
         {
-            IEnumerable<IngredientViewModel> ingredients = await catalogService.GetAllIngredientsAsync();
+            IEnumerable<IngredientViewModel> ingredients = await catalogService.GetAllIngredientsAsync(searchQuery);
+
+            ViewData["SearchQuery"] = searchQuery;
             return View(ingredients);
              
         }
