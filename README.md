@@ -21,7 +21,7 @@ NuGet packages:
    > Microsoft.EntityFrameworkCore.SqlServer                   8.0.23     
    > Microsoft.VisualStudio.Web.CodeGeneration.Design          8.0.23 
    > Microsoft.AspNetCore.Identity.EntityFrameworkCore         8.0.23  
-   > Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore      8.0.23 
+   > Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore      8.0.23
 
  
 
@@ -46,11 +46,16 @@ NuGet packages:
 ## Features
 - Recipe logging with detailed nutrient profiles
 - Extensive food database with nutrient information
+- Journaling and tracking of daily nutrition intake
+- Search functionality for foods and recipes
+- User authentication and profile management
 
+## Known Issues
+- Data validation is incomplete, allowing for potential inconsistencies in the database.
+- Having a journal that contains a Meal, may or may not allow for the new Meal to be added.
+- Unit tests have not been implemented yet, which may lead to undetected bugs and issues in the application.
 ## License
 See LICENSE for details.
-
-
 
 
 
